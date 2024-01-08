@@ -1,0 +1,4 @@
+Flask
+aws-wsgi
+boto3
+amazon-textract-response-parser
