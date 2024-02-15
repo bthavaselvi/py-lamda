@@ -16,7 +16,7 @@ app = Flask(__name__)
 # Replace these with your AWS credentials and region
 aws_access_key_id = 'AKIAVCBFWUZMP3YK2JJ4'
 aws_secret_access_key = 'N44tPbUbPLHPIRB920t23abL9+vAaWBQNX54+ljR'
-region_name = 'us-east-2'
+
 
 # Initialize the Textract client
 textract_client = boto3.client('textract', aws_access_key_id=aws_access_key_id,
@@ -58,8 +58,7 @@ def analyze_business_card(file_content):
 
     business_card_details = {}
     for x in query_answers:
-        print(f"{x[1]},{x[2]}")
-        business_card_details[x[1]] = x[2]
+       business_card_details[x[1]] = x[2]
 
     print(business_card_details)
 
@@ -68,6 +67,9 @@ def analyze_business_card(file_content):
   
     return json.dumps(responseToReturn.__dict__)
 
+def analyze_invoice(file_content):
+     return textract_client.analyze_expense(Document={'Bytes': file_content})
+    
 
 def is_base64_encoded(data):
     try:
@@ -89,12 +91,20 @@ def analyze_business_card_route():
     try:
         # Get the file from the request
         file = request.files['file']
-       
+        document_type = request.form.get('documentType')
         file_content = file.read()
-        if is_base64_encoded(file_content) is True:
-            file_content = base64.b64decode(file_content)
+
+        # if is_base64_encoded(file_content) is True:
+        #     print('I am here')
+        #     file_content = base64.b64decode(file_content)
         # Analyze the business card using Textract
-        result = analyze_business_card(file_content)
+        result = None
+        if document_type.casefold() == 'Invoice'.casefold():
+           print('here too')
+           result= analyze_invoice(file_content)
+           print(result)
+        else:
+           result = analyze_business_card(file_content)
         return result, 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
