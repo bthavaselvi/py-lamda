@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install aws-sam-cli awscli
-          pip install -r requirements.txt
+          pip install -r .github/workflows/requirements.txt
 
       - name: Build SAM application
         run: sam build
