@@ -21,7 +21,7 @@ Resources:
     Properties:
       CodeUri: ocr/
       Handler: app.lambda_handler
-      Runtime: python3.7
+      Runtime: python3.12
       Architectures:
       - x86_64
       Events:
