@@ -16,7 +16,7 @@ jobs:
         run: env | sort
       - uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: 3.12
       - uses: aws-actions/setup-sam@v1
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
