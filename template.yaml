@@ -48,7 +48,7 @@ Resources:
       CodeUri: ocr/
       Handler: app.handler
       Runtime: python3.12
-      Role: !GetAtt LambdaExecutionRole.Arn
+      Role: !GetAtt LambdaExeLambdaExecutionRole.Arn
       Architectures:
       - x86_64
       Events:
@@ -83,4 +83,4 @@ Outputs:
     Value: !GetAtt OCRFunction.Arn
   OCRFunctionIamRole:
     Description: Implicit IAM Role created for Hello World function
-    Value: !GetAtt OCRFunctionRole.Arn
+    Value: !GetAtt LambdaExecutionRole.Arn
