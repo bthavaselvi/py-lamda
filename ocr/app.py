@@ -19,8 +19,8 @@ aws_secret_access_key = 'N44tPbUbPLHPIRB920t23abL9+vAaWBQNX54+ljR'
 region_name = 'us-east-2'
 
 # Initialize the Textract client
-textract_client = boto3.client('textract', aws_access_key_id=aws_access_key_id,
-                               aws_secret_access_key=aws_secret_access_key, region_name=region_name)
+
+textract_client = boto3.client('textract', region_name=region_name)
 
 def analyze_business_card(file_content):
     # Call Textract API to analyze the business card
@@ -100,9 +100,9 @@ def analyze_business_card_route():
         # Analyze the business card using Textract
         result = None
         if document_type.casefold() == 'Invoice'.casefold():
-           print('here too')
+          
            result= analyze_invoice(file_content)
-           print(result)
+          
         else:
            result = analyze_business_card(file_content)
         return result, 200

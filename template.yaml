@@ -15,17 +15,44 @@ Globals:
  
   Api:
     TracingEnabled: true
+    BinaryMediaTypes:
+      - '*/*'
 Resources:
+  LambdaExecutionRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: lambda.amazonaws.com
+              Action: 'sts:AssumeRole'
+        Policies:
+          - PolicyName: LambdaTextractAccessPolicy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - 'textract:DetectDocumentText'
+                    - 'textract:AnalyzeDocument'
+                    - 'textract:StartDocumentTextDetection'
+                    - 'textract:GetDocumentTextDetection'
+                    - 'textract:StartDocumentAnalysis'
+                    - 'textract:GetDocumentAnalysis'
+                  Resource: '*'
   OCRFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: ocr/
-      Handler: app.lambda_handler
+      Handler: app.handler
       Runtime: python3.12
+      Role: !GetAtt LambdaExecutionRole.Arn
       Architectures:
       - x86_64
       Events:
-        HelloWorld:
+        OCR:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /{proxy+}
@@ -50,9 +77,9 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   OCRApi:
     Description: API Gateway endpoint URL for Prod stage for Hello World function
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/ocr/"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/ocr"
   OCRFunction:
-    Description: Hello World Lambda Function ARN
+    Description: OCR Lambda Function ARN
     Value: !GetAtt OCRFunction.Arn
   OCRFunctionIamRole:
     Description: Implicit IAM Role created for Hello World function
