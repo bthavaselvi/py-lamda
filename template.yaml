@@ -28,20 +28,20 @@ Resources:
               Principal:
                 Service: lambda.amazonaws.com
               Action: 'sts:AssumeRole'
-        Policies:
-          - PolicyName: LambdaTextractAccessPolicy
-            PolicyDocument:
-              Version: '2012-10-17'
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - 'textract:DetectDocumentText'
-                    - 'textract:AnalyzeDocument'
-                    - 'textract:StartDocumentTextDetection'
-                    - 'textract:GetDocumentTextDetection'
-                    - 'textract:StartDocumentAnalysis'
-                    - 'textract:GetDocumentAnalysis'
-                  Resource: '*'
+      Policies:
+        - PolicyName: LambdaTextractAccessPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'textract:DetectDocumentText'
+                  - 'textract:AnalyzeDocument'
+                  - 'textract:StartDocumentTextDetection'
+                  - 'textract:GetDocumentTextDetection'
+                  - 'textract:StartDocumentAnalysis'
+                  - 'textract:GetDocumentAnalysis'
+                Resource: '*'
   OCRFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
