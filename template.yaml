@@ -48,6 +48,7 @@ Resources:
       CodeUri: ocr/
       Handler: app.handler
       Runtime: python3.12
+      PackageType: Zip
       Role: !GetAtt LambdaExecutionRole.Arn
       Architectures:
       - x86_64
