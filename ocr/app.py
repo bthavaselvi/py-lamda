@@ -75,7 +75,7 @@ def is_base64_encoded(data):
     try:
         # Attempt to decode the string
         decoded_bytes = base64.b64decode(data)
-        
+
         # Encode it back to check if it's a valid base64 encoding
         # reencoded_bytes = base64.b64encode(decoded_bytes)
         
@@ -110,6 +110,15 @@ def analyze_business_card_route():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/hello', methods=['GET'])
+def sayHello():
+    try:
+      
+        return jsonify({'say': 'hi'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    
 def handler(event, context):
     return awsgi.response(app, event, context)
 
