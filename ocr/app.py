@@ -75,6 +75,7 @@ def is_base64_encoded(data):
     try:
         # Attempt to decode the string
         decoded_bytes = base64.b64decode(data)
+        
         # Encode it back to check if it's a valid base64 encoding
         # reencoded_bytes = base64.b64encode(decoded_bytes)
         
