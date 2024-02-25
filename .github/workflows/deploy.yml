@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install aws-sam-cli awscli
-          pip install -r .github/workflows/requirements.txt
+          pip install -r requirements.txt
   
       - uses: aws-actions/setup-sam@v1
       - name: Configure AWS Credentials
