@@ -66,6 +66,9 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
+            TracingEnabled: true
+            MetricsEnabled: true
+            DataTraceEnabled: true
 
   
 Outputs:
