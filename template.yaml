@@ -17,6 +17,21 @@ Globals:
     TracingEnabled: true
     BinaryMediaTypes:
       - '*/*'
+    MethodSettings: [{
+        # Turn on Info logging
+        "LoggingLevel": "INFO",
+
+        # Enable Metrics
+        "MetricsEnabled": True,
+
+        # Trace-level Logging
+        "DataTraceEnabled": True,
+
+        # On all Paths & methods
+        "ResourcePath": "/*",
+        "HttpMethod": "*",
+    }]
+
 Resources:
   LambdaExecutionRole:
       Type: AWS::IAM::Role
@@ -63,9 +78,6 @@ Resources:
       Events:
         OCR:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          TracingEnabled: true
-          MetricsEnabled: true
-          DataTraceEnabled: true
           Properties:
             Path: /{proxy+}
             Method: ANY
