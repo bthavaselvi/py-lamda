@@ -104,8 +104,8 @@ Resources:
                 - "apigateway.amazonaws.com"
             Action: "sts:AssumeRole"
       Path: "/"
-      ManagedPolicyArns: 
-        - "arn:aws:iam::347971429976:role/aws-service-role/ops.apigateway.amazonaws.com/AWSServiceRoleForAPIGateway"
+      ManagedPolicyArns:
+          - 'arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs'
        
 
   
