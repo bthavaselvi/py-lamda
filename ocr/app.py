@@ -110,7 +110,7 @@ def analyze_business_card_route():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/hello', methods=['GET'])
+@app.route('/', methods=['GET'])
 def sayHello():
     try:
       
