@@ -100,7 +100,7 @@ def analyze_business_card_route():
         #     file_content = base64.b64decode(file_content)
         # Analyze the business card using Textract
         result = None
-        if document_type.casefold() == 'Invoice'.casefold():
+        if document_type is not None and document_type.casefold() == 'Invoice'.casefold():
           
            result= analyze_invoice(file_content)
           
@@ -110,7 +110,7 @@ def analyze_business_card_route():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/', methods=['GET'])
+@app.route('/sayHello', methods=['GET'])
 def sayHello():
     try:
       
