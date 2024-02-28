@@ -12,18 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Print
-        run: env | sort
-      - uses: actions/setup-python@v4
-        with:
-          python-version: 3.12
-      - name: Install dependencies
-        run: |
-          pip install aws-sam-cli awscli
-          python -m pip install --upgrade pip
-          pip install -r .github/workflows/requirements.txt
-  
-      - uses: aws-actions/setup-sam@v1
+      - uses: aws-actions/setup-sam@v2
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -31,11 +20,18 @@ jobs:
           aws-region: us-east-2
           role-to-assume: arn:aws:iam::347971429976:role/github_action
           role-session-name: MySessionName    
-
-
-      - name: SAM build    
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+          cache: 'pip'
+      - name: Install dependencies
+        run: |
+          pip install aws-sam-cli awscli
+          pip install -r .github/workflows/requirements.txt
+       
+      - name: SAM build 
         run: 
-          sam build
+          sam build --use-container
 
       - name: Deploy SAM application
         run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
