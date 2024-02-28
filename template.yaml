@@ -83,7 +83,7 @@ Resources:
             Method: ANY
 
    ConfigLambdaPermission:
-    Type: "AWS::Lambda::Permission"
+    Type: AWS::Lambda::Permission
     DependsOn: OCRFunction
     Properties:
       Action: lambda:InvokeFunction
