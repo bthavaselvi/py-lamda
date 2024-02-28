@@ -120,7 +120,7 @@ def sayHello():
     
     
     
-def handler(event, context):
+def lambda_handler(event, context):
     return awsgi.response(app, event, context)
 
 if __name__ == '__main__':
