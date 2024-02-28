@@ -69,7 +69,7 @@ Resources:
       CodeUri: ocr/
       Policies:
        - CloudWatchLogsFullAccess
-      Handler: app.handler
+      Handler: lamda_function.lambda_handler
       Runtime: python3.12
       PackageType: Zip
       Role: !GetAtt LambdaExecutionRole.Arn
