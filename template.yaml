@@ -82,7 +82,7 @@ Resources:
             Path: /{proxy+}
             Method: ANY
 
-   ConfigLambdaPermission:
+  ConfigLambdaPermission:
     Type: AWS::Lambda::Permission
     DependsOn: OCRFunction
     Properties:
