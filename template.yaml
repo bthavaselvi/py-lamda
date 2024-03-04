@@ -81,21 +81,21 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
-  OCRApi:
-    Type: AWS::Serverless::HttpApi
-    Properties:
-      StageName: Prod
-      Auth:
-        DefaultAuthorizer: OCRLambdaRequestAuthorizer
-        Authorizers:
-          OCRLambdaRequestAuthorizer:
-            FunctionArn: !GetAtt OCRFunction.Arn
-            FunctionInvokeRole: !GetAtt LambdaExecutionRole.Arn
-            Identity:
-              Headers:
-                - Authorization
-            AuthorizerPayloadFormatVersion: 2.0
-            EnableSimpleResponses: true
+  # OCRApi:
+  #   Type: AWS::Serverless::HttpApi
+  #   Properties:
+  #     StageName: Prod
+  #     Auth:
+  #       DefaultAuthorizer: OCRLambdaRequestAuthorizer
+  #       Authorizers:
+  #         OCRLambdaRequestAuthorizer:
+  #           FunctionArn: !GetAtt OCRFunction.Arn
+  #           FunctionInvokeRole: !GetAtt LambdaExecutionRole.Arn
+  #           Identity:
+  #             Headers:
+  #               - Authorization
+  #           AuthorizerPayloadFormatVersion: 2.0
+  #           EnableSimpleResponses: true
 
   ConfigLambdaPermission:
     Type: AWS::Lambda::Permission
