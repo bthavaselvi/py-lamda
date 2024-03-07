@@ -5,7 +5,7 @@ codeuri = "c:\\ocr\\ocr-service\\ocr"
 runtime = "python3.12"
 architecture = "x86_64"
 handler = "app.handler"
-manifest_hash = ""
+manifest_hash = "382c1c93950200be835d94fc5b7253b3"
 packagetype = "Zip"
 functions = ["OCRFunction"]
 
