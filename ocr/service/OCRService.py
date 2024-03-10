@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import boto3
 import trp.trp2 as t2
-from response import BusinessCard
+from response import BusinessCard.BaseException as BusinessCard
 
 region_name = 'us-east-2'
 textract_client = boto3.client('textract', region_name=region_name)

@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 import awsgi
 from common.OCRServiceFactory import OCRServiceFactory
-from service.OCRService import BusinessCardService,InvoiceService
 
 import traceback
 
@@ -15,7 +14,7 @@ def analyze_document():
         document_type = request.form.get('documentType')
         file_content = file.read()
         service_to_call = OCRServiceFactory().create_OCR_service(document_type)
-        return jsonify(service_to_call.analyze_document(data= file_content),status=200, mimetype='application/json')
+        return jsonify(service_to_call.analyze_document(data=file_content),status=200, mimetype='application/json')
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
