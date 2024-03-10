@@ -20,7 +20,6 @@ def analyze_document():
 
 @app.route('/sayHello', methods=['GET'])
 def sayHello():
-    print('3')
     try:
       
         return jsonify({'say': 'hi'}), 200
@@ -29,7 +28,6 @@ def sayHello():
         return jsonify({'error': str(e)}), 500
     
 def lambda_handler(event, context):
-    print('4')
     return awsgi.response(app, event, context)
 
 if __name__ == '__main__':

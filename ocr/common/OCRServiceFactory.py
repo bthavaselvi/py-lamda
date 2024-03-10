@@ -5,7 +5,7 @@ class OCRServiceFactory:
     @staticmethod 
     def create_OCR_service(document_type):
         if document_type == DocumentType.BUSINESS_CARD.name :
-            return  BusinessCardService()
+            return  BusinessCardService.BusinessCardService()
         elif document_type == DocumentType.INVOICE :
             return InvoiceService()
         else:
