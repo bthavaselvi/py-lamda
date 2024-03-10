@@ -1,5 +1,5 @@
 requests
 Flask
 aws-wsgi
-boto3
+boto3=1.34.59
 amazon-textract-response-parser
