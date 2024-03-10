@@ -1,4 +1,4 @@
-from DocumentType import DocumentType
+from common.DocumentType import DocumentType
 from service.OCRService import BusinessCardService,InvoiceService
 
 class OCRServiceFactory:
