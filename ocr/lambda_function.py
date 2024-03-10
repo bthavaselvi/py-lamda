@@ -4,7 +4,6 @@ from common.OCRServiceFactory import OCRServiceFactory
 from service.OCRService import BusinessCardService,InvoiceService
 
 import traceback
-import ba
 
 app = Flask(__name__)
 
