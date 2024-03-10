@@ -16,7 +16,7 @@ def analyze_document():
         file_content = file.read()
         service_to_call = OCRServiceFactory().create_OCR_service(document_type)
         data = service_to_call.analyze_document(data=file_content)
-        return jsonify(data=data),200
+        return data,200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
