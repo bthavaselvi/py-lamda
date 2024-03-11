@@ -52,7 +52,7 @@ class BusinessCardService(OCR):
 
         return  BusinessCard(business_card_details['firstName'],business_card_details['lastName'],
                              business_card_details['emailId'],business_card_details['address'],
-                             business_card_details['phone']).toJson 
+                             business_card_details['phone'])
 
 class InvoiceService(OCR):
     def analyze_document(self, data: bytes):
