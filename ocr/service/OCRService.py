@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import boto3
 import trp.trp2 as t2
 from response.BusinessCard import BusinessCard
-
+import traceback
 region_name = 'us-east-2'
 textract_client = boto3.client('textract', region_name=region_name)
 
@@ -56,4 +56,8 @@ class BusinessCardService(OCR):
 
 class InvoiceService(OCR):
     def analyze_document(self, data: bytes):
-         return textract_client.analyze_expense(Document={'Bytes': data})
+         try:
+             return textract_client.analyze_expense(Document={'Bytes': data})
+         except Exception as e:
+             traceback.print_exc()
+             raise
