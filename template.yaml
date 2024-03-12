@@ -56,6 +56,7 @@ Resources:
                     - 'textract:GetDocumentTextDetection'
                     - 'textract:StartDocumentAnalysis'
                     - 'textract:GetDocumentAnalysis'
+                    - 'textract:AnalyzeExpense'
                   Resource: '*'
   OCRLogGroup:
     Type: AWS::Logs::LogGroup
