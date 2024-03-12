@@ -6,7 +6,7 @@ class OCRServiceFactory:
     def create_OCR_service(document_type):
         if document_type == DocumentType.BUSINESS_CARD.name :
             return  BusinessCardService()
-        elif document_type == DocumentType.INVOICE :
+        elif document_type == DocumentType.INVOICE.name:
             return InvoiceService()
         else:
             raise Exception('Invalid document type')
