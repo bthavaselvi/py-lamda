@@ -59,6 +59,7 @@ class InvoiceService(OCR):
          try:
              response =  textract_client.analyze_expense(Document={'Bytes': data})
              expense = t2.TAnalyzeExpenseDocumentSchema().load(response)
+             return expense
              print(expense)
          except Exception as e:
              traceback.print_exc()
