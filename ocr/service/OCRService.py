@@ -23,7 +23,7 @@ class BusinessCardService(OCR):
                     'What is the address?',
                     'What is the phone number?'
                     ]
-            response = textract_client.analyze_document(fil_source=data,
+            response = textract_client.analyze_document(file_source=data,
                                 features=[TextractFeatures.QUERIES],
                                 queries= queries)
 
