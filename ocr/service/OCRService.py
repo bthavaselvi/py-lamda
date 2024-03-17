@@ -28,26 +28,26 @@ class BusinessCardService(OCR):
     
             query_answers = response.queries
             business_card_details = {}
-            if queries[0].result:
+            if query_answers[0].result:
                 business_card_details['firstName'] = query_answers[0].result.answer
             else:
                 business_card_details['firstName'] = ''
            
-            if queries[1].result:
+            if query_answers[1].result:
                 business_card_details['lastName'] = query_answers[1].result.answer
             else:
                 business_card_details['lastName'] = ''
 
-            if queries[2].result:
+            if query_answers[2].result:
                 business_card_details['emailId'] = query_answers[2].result.answer
             else:
                 business_card_details['emailId'] = ''
             
-            if queries[3].result:
+            if query_answers[3].result:
                 business_card_details['address'] = query_answers[3].result.answer
             else:
                 business_card_details['address'] = ''
-            if queries[4].result:
+            if query_answers[4].result:
                 business_card_details['phone'] = query_answers[4].result.answer
             else:
                 business_card_details['phone'] = ''
