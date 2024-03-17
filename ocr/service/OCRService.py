@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
-import boto3
-import trp.trp2 as t2
+from textractor import Textractor
 from response.BusinessCard import BusinessCard
 import traceback
 region_name = 'us-east-2'
-textract_client = boto3.client('textract', region_name=region_name)
+textract_client = Textractor(profile_name=region_name)
 
 class OCR:
     @abstractmethod
@@ -14,41 +13,41 @@ class OCR:
 class BusinessCardService(OCR):
 
     def analyze_document(self, data: bytes):
-        response = textract_client.analyze_document(Document={'Bytes': data},
+        response = textract_client.analyze_document(fil_source=data,
                             FeatureTypes=["QUERIES"],
                             QueriesConfig={"Queries":[
                                         {
-                                            'Text': 'What is the person first name?',
-                                            'Alias': 'firstName'
+                                            'query': 'What is the person first name?',
+                                            'alias': 'firstName'
                                         },
                                         {
-                                            'Text': 'What is the person last name?',
-                                            'Alias': 'lastName'
+                                            'query': 'What is the person last name?',
+                                            'alias': 'lastName'
                                         },
                                         {
-                                            'Text': 'What is the emailId?',
-                                            'Alias': 'emailId'
+                                            'query': 'What is the emailId?',
+                                            'alias': 'emailId'
                                         },
                                         {
                                             
-                                            'Text': 'What is the address?',
-                                            'Alias': 'address'
+                                            'query': 'What is the address?',
+                                            'alias': 'address'
 
                                         },
                                         {
-                                            'Text': 'What is the phone number?',
-                                            'Alias': 'phone'
+                                            'query': 'What is the phone number?',
+                                            'alias': 'phone'
                                         },
                                     ]
                             })
 
-        d = t2.TDocumentSchema().load(response)
-        page = d.pages[0]
-        query_answers = d.get_query_answers(page=page)
-
+  
+        query_answers = response.queries
         business_card_details = {}
-        for x in query_answers:
-            business_card_details[x[1]] = x[2]
+        for query in query_answers:
+            
+            if query.result:
+                business_card_details[query.alias] = query.result.answer
 
         return  BusinessCard(business_card_details['firstName'],business_card_details['lastName'],
                              business_card_details['emailId'],business_card_details['address'],
