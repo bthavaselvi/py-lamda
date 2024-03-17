@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from textractor import Textractor
+from textractor.data.constants import TextractFeatures
 from response.BusinessCard import BusinessCard
 import traceback
 region_name = 'us-east-2'
@@ -13,33 +14,16 @@ class OCR:
 class BusinessCardService(OCR):
 
     def analyze_document(self, data: bytes):
+        
+        queries = [ 'What is the person first name?',
+                'What is the person last name?',
+                'What is the emailId?',
+                'What is the address?',
+                'What is the phone number?'
+                ]
         response = textract_client.analyze_document(fil_source=data,
-                            FeatureTypes=["QUERIES"],
-                            QueriesConfig={"Queries":[
-                                        {
-                                            'query': 'What is the person first name?',
-                                            'alias': 'firstName'
-                                        },
-                                        {
-                                            'query': 'What is the person last name?',
-                                            'alias': 'lastName'
-                                        },
-                                        {
-                                            'query': 'What is the emailId?',
-                                            'alias': 'emailId'
-                                        },
-                                        {
-                                            
-                                            'query': 'What is the address?',
-                                            'alias': 'address'
-
-                                        },
-                                        {
-                                            'query': 'What is the phone number?',
-                                            'alias': 'phone'
-                                        },
-                                    ]
-                            })
+                            features=[TextractFeatures.QUERIES],
+                             queries= queries)
 
   
         query_answers = response.queries
