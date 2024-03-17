@@ -3,10 +3,8 @@ from textractor import Textractor
 from textractor.data.constants import TextractFeatures
 from response.BusinessCard import BusinessCard
 import traceback
-import logging
-log = logging.getLogger("my-logger")
 region_name = 'us-east-2'
-textract_client = Textractor(region_name =region_name)
+textract_client = Textractor(profile_name=region_name)
 
 class OCR:
     @abstractmethod
@@ -23,53 +21,32 @@ class BusinessCardService(OCR):
                     'What is the address?',
                     'What is the phone number?'
                     ]
-            response = textract_client.analyze_document(file_source=data,
+            response = textract_client.analyze_document(Document={'Bytes',data},
                                 features=[TextractFeatures.QUERIES],
                                 queries= queries)
 
     
             query_answers = response.queries
             business_card_details = {}
-            if query_answers[0].result:
-                business_card_details['firstName'] = query_answers[0].result.answer
-            else:
-                business_card_details['firstName'] = ''
-           
-            if query_answers[1].result:
-                business_card_details['lastName'] = query_answers[1].result.answer
-            else:
-                business_card_details['lastName'] = ''
-
-            if query_answers[2].result:
-                business_card_details['emailId'] = query_answers[2].result.answer
-            else:
-                business_card_details['emailId'] = ''
-            
-            if query_answers[3].result:
-                business_card_details['address'] = query_answers[3].result.answer
-            else:
-                business_card_details['address'] = ''
-            if query_answers[4].result:
-                business_card_details['phone'] = query_answers[4].result.answer
-            else:
-                business_card_details['phone'] = ''
+            for query in query_answers:
+                
+                if query.result:
+                    business_card_details[query.alias] = query.result.answer
 
             return  BusinessCard(business_card_details['firstName'],business_card_details['lastName'],
                                 business_card_details['emailId'],business_card_details['address'],
                                 business_card_details['phone'])
         except  Exception as e:
              traceback.print_exc()
-             logging.error(e)
-             raise
 
 class InvoiceService(OCR):
     def analyze_document(self, data: bytes):
          try:
-            #  response =  textract_client.analyze_expense(Document={'Bytes': data})
-            #  expense = t2.TAnalyzeExpenseDocumentSchema().load(response)
-            #  print(expense)
-            #  return expense
-            print('hi')
+             response =  textract_client.analyze_expense(Document={'Bytes': data})
+             expense = t2.TAnalyzeExpenseDocumentSchema().load(response)
+             print(expense)
+             return expense
+            
          except Exception as e:
              traceback.print_exc()
              raise
