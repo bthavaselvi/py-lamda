@@ -28,16 +28,36 @@ class BusinessCardService(OCR):
     
             query_answers = response.queries
             business_card_details = {}
-            for query in query_answers:
-                
-                if query.result:
-                    business_card_details[query.alias] = query.result.answer
+            if queries[0].result:
+                business_card_details['firstName'] = query_answers[0].result.answer
+            else:
+                business_card_details['firstName'] = ''
+           
+            if queries[1].result:
+                business_card_details['lastName'] = query_answers[1].result.answer
+            else:
+                business_card_details['lastName'] = ''
+
+            if queries[2].result:
+                business_card_details['emailId'] = query_answers[2].result.answer
+            else:
+                business_card_details['emailId'] = ''
+            
+            if queries[3].result:
+                business_card_details['address'] = query_answers[3].result.answer
+            else:
+                business_card_details['address'] = ''
+            if queries[4].result:
+                business_card_details['phone'] = query_answers[4].result.answer
+            else:
+                business_card_details['phone'] = ''
 
             return  BusinessCard(business_card_details['firstName'],business_card_details['lastName'],
                                 business_card_details['emailId'],business_card_details['address'],
                                 business_card_details['phone'])
         except  Exception as e:
              traceback.print_exc()
+             raise
 
 class InvoiceService(OCR):
     def analyze_document(self, data: bytes):
