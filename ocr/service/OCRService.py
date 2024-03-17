@@ -14,28 +14,30 @@ class OCR:
 class BusinessCardService(OCR):
 
     def analyze_document(self, data: bytes):
-        
-        queries = [ 'What is the person first name?',
-                'What is the person last name?',
-                'What is the emailId?',
-                'What is the address?',
-                'What is the phone number?'
-                ]
-        response = textract_client.analyze_document(fil_source=data,
-                            features=[TextractFeatures.QUERIES],
-                             queries= queries)
+        try:
+            queries = [ 'What is the person first name?',
+                    'What is the person last name?',
+                    'What is the emailId?',
+                    'What is the address?',
+                    'What is the phone number?'
+                    ]
+            response = textract_client.analyze_document(fil_source=data,
+                                features=[TextractFeatures.QUERIES],
+                                queries= queries)
 
-  
-        query_answers = response.queries
-        business_card_details = {}
-        for query in query_answers:
-            
-            if query.result:
-                business_card_details[query.alias] = query.result.answer
+    
+            query_answers = response.queries
+            business_card_details = {}
+            for query in query_answers:
+                
+                if query.result:
+                    business_card_details[query.alias] = query.result.answer
 
-        return  BusinessCard(business_card_details['firstName'],business_card_details['lastName'],
-                             business_card_details['emailId'],business_card_details['address'],
-                             business_card_details['phone'])
+            return  BusinessCard(business_card_details['firstName'],business_card_details['lastName'],
+                                business_card_details['emailId'],business_card_details['address'],
+                                business_card_details['phone'])
+        except  Exception as e:
+             traceback.print_exc()
 
 class InvoiceService(OCR):
     def analyze_document(self, data: bytes):
