@@ -6,7 +6,7 @@ import traceback
 import logging
 log = logging.getLogger("my-logger")
 region_name = 'us-east-2'
-textract_client = Textractor(profile_name=region_name)
+textract_client = Textractor(region_name =region_name)
 
 class OCR:
     @abstractmethod
