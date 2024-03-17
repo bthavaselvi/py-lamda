@@ -3,4 +3,3 @@ Flask
 aws-wsgi
 boto3
 amazon-textract-textractor
-amazon-textract-response-parser
