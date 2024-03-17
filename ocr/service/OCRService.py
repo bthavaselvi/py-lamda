@@ -3,6 +3,8 @@ from textractor import Textractor
 from textractor.data.constants import TextractFeatures
 from response.BusinessCard import BusinessCard
 import traceback
+import logging
+log = logging.getLogger("my-logger")
 region_name = 'us-east-2'
 textract_client = Textractor(profile_name=region_name)
 
@@ -57,6 +59,7 @@ class BusinessCardService(OCR):
                                 business_card_details['phone'])
         except  Exception as e:
              traceback.print_exc()
+             logging.error(e)
              raise
 
 class InvoiceService(OCR):

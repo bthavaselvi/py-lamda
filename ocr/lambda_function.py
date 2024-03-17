@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import awsgi
 from common.OCRServiceFactory import OCRServiceFactory
 import json
-
+import logging
 import traceback
 
 app = Flask(__name__)
@@ -18,6 +18,7 @@ def analyze_document():
         data = service_to_call.analyze_document(data=file_content)
         return jsonify(data.__dict__),200
     except Exception as e:
+        logging.error(e)
         return jsonify({'error': str(e)}), 500
 
 @app.route('/sayHello', methods=['GET'])
