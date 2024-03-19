@@ -11,7 +11,7 @@ log = logging.getLogger("my-logger")
 
 region_name = 'us-east-2'
 textract_client =boto3.client('textract', region_name=region_name)
-extractor = Textractor(profile_name="default")
+extractor = Textractor()
 
 class OCR:
     @abstractmethod
