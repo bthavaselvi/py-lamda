@@ -13,7 +13,6 @@ log = logging.getLogger("my-logger")
 region_name = 'us-east-2'
 textract_client =boto3.client('textract', region_name=region_name)
 
-response_parser = ResponseParser()
 
 class OCR:
     @abstractmethod
@@ -72,11 +71,8 @@ class BusinessCardService(OCR):
 class InvoiceService(OCR):
     def analyze_document(self, data: bytes):
          try:
-            #  response =  textract_client.analyze_expense(Document={'Bytes': data})
-            #  expense = t2.TAnalyzeExpenseDocumentSchema().load(response)
-            #  print(expense)
-            #  return expense
-            print('hi')
+            response =  textract_client.analyze_expense(Document={'Bytes': data})          
+            return response_parser.parser_analyze_expense_response(response)
          except Exception as e:
              traceback.print_exc()
              raise
