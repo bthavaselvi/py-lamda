@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
+
 from textractor import Textractor
-from textractor.data.constants import TextractFeatures
+
 from response.BusinessCard import BusinessCard
 import traceback
 import logging
@@ -17,46 +18,46 @@ class BusinessCardService(OCR):
 
     def analyze_document(self, data: bytes):
         try:
-            queries = [ 'What is the person first name?',
-                    'What is the person last name?',
-                    'What is the emailId?',
-                    'What is the address?',
-                    'What is the phone number?'
-                    ]
-            response = textract_client.analyze_document(file_source=data,
-                                features=[TextractFeatures.QUERIES],
-                                queries= queries)
+            response = textract_client.analyze_document(Document={'Bytes': data},
+                            FeatureTypes=["QUERIES"],
+                            QueriesConfig={"Queries":[
+                                        {
+                                            'Text': 'What is the person first name?',
+                                            'Alias': 'firstName'
+                                        },
+                                        {
+                                            'Text': 'What is the person last name?',
+                                            'Alias': 'lastName'
+                                        },
+                                        {
+                                            'Text': 'What is the emailId?',
+                                            'Alias': 'emailId'
+                                        },
+                                        {
+                                            
+                                            'Text': 'What is the address?',
+                                            'Alias': 'address'
 
-    
-            query_answers = response.queries
-            business_card_details = {}
-            if query_answers[0].result:
-                business_card_details['firstName'] = query_answers[0].result.answer
-            else:
-                business_card_details['firstName'] = ''
+                                        },
+                                        {
+                                            'Text': 'What is the phone number?',
+                                            'Alias': 'phone'
+                                        },
+                                    ]
+                            })
+
+            d = textractor.parsers.response_parser.parse_document_api_response(response)
            
-            if query_answers[1].result:
-                business_card_details['lastName'] = query_answers[1].result.answer
-            else:
-                business_card_details['lastName'] = ''
+            queries_answers = d.queries
 
-            if query_answers[2].result:
-                business_card_details['emailId'] = query_answers[2].result.answer
-            else:
-                business_card_details['emailId'] = ''
-            
-            if query_answers[3].result:
-                business_card_details['address'] = query_answers[3].result.answer
-            else:
-                business_card_details['address'] = ''
-            if query_answers[4].result:
-                business_card_details['phone'] = query_answers[4].result.answer
-            else:
-                business_card_details['phone'] = ''
+            business_card_details = {}
+            for query in queries_answers:
+                business_card_details[query.alias] = query.result.answer
 
             return  BusinessCard(business_card_details['firstName'],business_card_details['lastName'],
                                 business_card_details['emailId'],business_card_details['address'],
                                 business_card_details['phone'])
+
         except  Exception as e:
              traceback.print_exc()
              logging.error(e)
