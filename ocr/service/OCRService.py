@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
-from textractor import Textractor
+
+from textractor import ResponseParser
 
 from response.BusinessCard import BusinessCard
 import traceback
@@ -11,7 +12,8 @@ log = logging.getLogger("my-logger")
 
 region_name = 'us-east-2'
 textract_client =boto3.client('textract', region_name=region_name)
-extractor = Textractor( region_name = region_name)
+
+response_parser = ResponseParser()
 
 class OCR:
     @abstractmethod
@@ -50,7 +52,7 @@ class BusinessCardService(OCR):
                                     ]
                             })
 
-            d = extractor.parsers.response_parser.parse_document_api_response(response)
+            d = response_parser.parse_document_api_response(response)
            
             queries_answers = d.queries
 
