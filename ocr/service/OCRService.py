@@ -5,9 +5,12 @@ from textractor import Textractor
 from response.BusinessCard import BusinessCard
 import traceback
 import logging
+import boto3
+
 log = logging.getLogger("my-logger")
+
 region_name = 'us-east-2'
-textract_client = Textractor(region_name =region_name)
+textract_client =boto3.client('textract', region_name=region_name)
 
 class OCR:
     @abstractmethod
