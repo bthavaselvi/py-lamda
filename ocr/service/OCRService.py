@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-from textractor import ResponseParser
+from textractor.parsers import response_parser
 
 from response.BusinessCard import BusinessCard
 import traceback
@@ -52,7 +52,7 @@ class BusinessCardService(OCR):
                                     ]
                             })
 
-            d = response_parser.parse_document_api_response(response)
+            d = response_parser.parse(response)
            
             queries_answers = d.queries
 
