@@ -11,6 +11,7 @@ log = logging.getLogger("my-logger")
 
 region_name = 'us-east-2'
 textract_client =boto3.client('textract', region_name=region_name)
+extractor = Textractor(profile_name="default")
 
 class OCR:
     @abstractmethod
@@ -49,7 +50,7 @@ class BusinessCardService(OCR):
                                     ]
                             })
 
-            d = textractor.parsers.response_parser.parse_document_api_response(response)
+            d = extractor.parsers.response_parser.parse_document_api_response(response)
            
             queries_answers = d.queries
 
