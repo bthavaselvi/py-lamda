@@ -109,7 +109,7 @@ class InvoiceService(OCR):
          try:
             response =  textract_client.analyze_expense(Document={'Bytes': data})   
             expense_document = response_parser.parser_analyze_expense_response(response).expense_documents[0]       
-            expense_doc_to_return =  toExpenseDocument(expense_document)
+            expense_doc_to_return =  self.toExpenseDocument(expense_document)
             return expense_doc_to_return
          except Exception as e:
              traceback.print_exc()
