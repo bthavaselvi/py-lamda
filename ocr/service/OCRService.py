@@ -9,6 +9,7 @@ import logging
 import boto3
 from response.ExpenseDocument import ReceiverBillTo,ReceverShipTo,Vendor,LineItem,ExpenseDocument
 from response.Address import Address
+from response.IDResponse import IDDocument
 
 log = logging.getLogger("my-logger")
 
@@ -107,18 +108,24 @@ class InvoiceService(OCR):
            
 
     def analyze_document(self, data: bytes):
-         try:
+        
             response =  textract_client.analyze_expense(Document={'Bytes': data})   
             expense_document = response_parser.parser_analyze_expense_response(response).expense_documents[0]       
             expense_doc_to_return =  self.toExpenseDocument(expense_document)
             return expense_doc_to_return
-         except Exception as e:
-             traceback.print_exc()
-             raise
+      
 class IDService(OCR):
     
     def analyze_document(self, data: bytes):
-        textract_client.analyze_id(Document={'Bytes': data})   
+       document = textract_client.analyze_id(Document={'Bytes': data})   
+       id_details = document.identity_documents[0]
+       return IDDocument(id_details['FIRST_NAME'],id_details['LAST_NAME'],id_details['MIDDLE_NAME'],
+                  id_details['SUFFIX'],id_details['DOCUMENT_NUMBER'],id_details['EXPIRATION_DATE'],
+                  id_details['DATE_OF_BIRTH'],id_details['STATE_NAME'],id_details['COUNTY'],id_details['DATE_OF_ISSUE'],
+                  id_details['CLASS'],id_details['RESTRICTIONS'],id_details['ENDORSEMENTS'],
+                  id_details['ID_TYPE'],id_details['VETERAN'],id_details['PLACE_OF_BIRTH'],
+                  Address(id_details['FIRST_NAME'],id_details['ADDRESS'],id_details['CITY_IN_ADDRESS'],
+                          id_details['STATE_IN_ADDRESS'],id_details['ZIP_CODE_IN_ADDRESS']))
 
          
 

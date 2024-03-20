@@ -1,5 +1,5 @@
 from common.DocumentType import DocumentType
-from service.OCRService import BusinessCardService,InvoiceService
+from service.OCRService import BusinessCardService,InvoiceService,IDService
 
 class OCRServiceFactory:
     @staticmethod 
@@ -8,5 +8,7 @@ class OCRServiceFactory:
             return  BusinessCardService()
         elif document_type == DocumentType.INVOICE.value:
             return InvoiceService()
+        elif document_type == DocumentType.ID.value:
+            return IDService()
         else:
             raise Exception('Invalid document type')
