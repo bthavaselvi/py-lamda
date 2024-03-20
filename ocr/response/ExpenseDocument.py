@@ -1,11 +1,5 @@
 from decimal import Decimal
-class Address:
-    def __init__(self,name:str , street:str, city:str,state:str,zip_code:str):
-        self.name =  name
-        self.street = street
-        self.city = city
-        self.state = state
-        self.zip_code = zip_code
+from Address import Address
 class ReceiverBillTo:
     def __init__(self,address: Address):
         self.address = address

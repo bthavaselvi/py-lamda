@@ -7,7 +7,8 @@ from response.BusinessCard import BusinessCard
 import traceback
 import logging
 import boto3
-from response.ExpenseDocument import Address,ReceiverBillTo,ReceverShipTo,Vendor,LineItem,ExpenseDocument
+from response.ExpenseDocument import ReceiverBillTo,ReceverShipTo,Vendor,LineItem,ExpenseDocument
+from response.Address import Address
 
 log = logging.getLogger("my-logger")
 
@@ -114,6 +115,11 @@ class InvoiceService(OCR):
          except Exception as e:
              traceback.print_exc()
              raise
+class IDService(OCR):
+    
+    def analyze_document(self, data: bytes):
+        textract_client.analyze_id(Document={'Bytes': data})   
+
          
 
         
