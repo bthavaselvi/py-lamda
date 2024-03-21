@@ -6,6 +6,8 @@ import logging
 import traceback
 
 app = Flask(__name__)
+logger = logging.getLogger()
+logger.setLevel('INFO')
 
 @app.route('/analyze', methods=['POST'])
 def analyze_document():
@@ -31,7 +33,11 @@ def sayHello():
         return jsonify({'error': str(e)}), 500
     
 def lambda_handler(event, context):
-    return awsgi.response(app, event, context)
+    try:
+        return awsgi.response(app, event, context)
+    except Exception as e:
+        logger.exception(repr(e))
+
 
 if __name__ == '__main__':
     lambda_function.run(debug=True)
