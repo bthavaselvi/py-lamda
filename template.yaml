@@ -58,6 +58,7 @@ Resources:
                     - 'textract:GetDocumentAnalysis'
                     - 'textract:AnalyzeExpense'
                     - 'textract:AmazonTextractFullAccess'
+                    - 'textract:AnalyzeID'
                   Resource: '*'
   OCRLogGroup:
     Type: AWS::Logs::LogGroup
