@@ -1,5 +1,5 @@
 from decimal import Decimal
-from Address import Address
+from response.Address import Address
 class ReceiverBillTo:
     def __init__(self,address: Address):
         self.address = address

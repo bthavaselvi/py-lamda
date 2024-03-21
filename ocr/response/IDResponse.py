@@ -1,4 +1,4 @@
-from Address import Address
+from response.Address import Address
 class IDDocument:
    def __init__(self,firstName:str,lastName:str,middleName:str,
              suffix:str,documentNumber:str,expirationDate:str,
