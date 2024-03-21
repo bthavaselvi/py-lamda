@@ -117,7 +117,7 @@ class InvoiceService(OCR):
 class IDService(OCR):
     
     def analyze_document(self, data: bytes):
-       document = textract_client.analyze_id(DocumentPages={'Bytes': data})   
+       document = textract_client.analyze_id(DocumentPages=[{'Bytes': data}])   
        id_details = document.identity_documents[0]
        return IDDocument(id_details['FIRST_NAME'],id_details['LAST_NAME'],id_details['MIDDLE_NAME'],
                   id_details['SUFFIX'],id_details['DOCUMENT_NUMBER'],id_details['EXPIRATION_DATE'],
