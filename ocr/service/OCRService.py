@@ -117,15 +117,20 @@ class InvoiceService(OCR):
 class IDService(OCR):
     
     def analyze_document(self, data: bytes):
-       document = textract_client.analyze_id(DocumentPages=[{'Bytes': data}])   
-       id_details = document.identity_documents[0]
-       return IDDocument(id_details['FIRST_NAME'],id_details['LAST_NAME'],id_details['MIDDLE_NAME'],
-                  id_details['SUFFIX'],id_details['DOCUMENT_NUMBER'],id_details['EXPIRATION_DATE'],
-                  id_details['DATE_OF_BIRTH'],id_details['STATE_NAME'],id_details['COUNTY'],id_details['DATE_OF_ISSUE'],
-                  id_details['CLASS'],id_details['RESTRICTIONS'],id_details['ENDORSEMENTS'],
-                  id_details['ID_TYPE'],id_details['VETERAN'],id_details['PLACE_OF_BIRTH'],
-                  Address(id_details['FIRST_NAME'],id_details['ADDRESS'],id_details['CITY_IN_ADDRESS'],
-                          id_details['STATE_IN_ADDRESS'],id_details['ZIP_CODE_IN_ADDRESS']))
+       try:
+            document = textract_client.analyze_id(DocumentPages=[{'Bytes': data}])   
+            id_details = document.identity_documents[0]
+            return IDDocument(id_details['FIRST_NAME'],id_details['LAST_NAME'],id_details['MIDDLE_NAME'],
+                        id_details['SUFFIX'],id_details['DOCUMENT_NUMBER'],id_details['EXPIRATION_DATE'],
+                        id_details['DATE_OF_BIRTH'],id_details['STATE_NAME'],id_details['COUNTY'],id_details['DATE_OF_ISSUE'],
+                        id_details['CLASS'],id_details['RESTRICTIONS'],id_details['ENDORSEMENTS'],
+                        id_details['ID_TYPE'],id_details['VETERAN'],id_details['PLACE_OF_BIRTH'],
+                        Address(id_details['FIRST_NAME'],id_details['ADDRESS'],id_details['CITY_IN_ADDRESS'],
+                                id_details['STATE_IN_ADDRESS'],id_details['ZIP_CODE_IN_ADDRESS']))
+       except Exception as e:
+            traceback.print_exc()
+            logging.error(e)
+            raise
 
          
 
