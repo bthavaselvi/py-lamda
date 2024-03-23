@@ -11,7 +11,7 @@ from response.ExpenseDocument import ReceiverBillTo,ReceverShipTo,Vendor,LineIte
 from response.Address import Address
 from response.IDResponse import IDDocument
 
-log = logging.getLogger("my-logger")
+log = logging.getLogger('my-logger')
 
 region_name = 'us-east-2'
 textract_client =boto3.client('textract', region_name=region_name)
@@ -118,8 +118,11 @@ class IDService(OCR):
     
     def analyze_document(self, data: bytes):
        try:
-            document = textract_client.analyze_id(DocumentPages=[{'Bytes': data}])   
+            print('I am here..')
+            document = textract_client.analyze_id(DocumentPages=[{'Bytes': data}]) 
+            print('I am here..1')  
             id_details = document.identity_documents[0]
+            print('I am here..2')
             return IDDocument(id_details['FIRST_NAME'],id_details['LAST_NAME'],id_details['MIDDLE_NAME'],
                         id_details['SUFFIX'],id_details['DOCUMENT_NUMBER'],id_details['EXPIRATION_DATE'],
                         id_details['DATE_OF_BIRTH'],id_details['STATE_NAME'],id_details['COUNTY'],id_details['DATE_OF_ISSUE'],
