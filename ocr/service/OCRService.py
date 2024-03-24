@@ -78,32 +78,32 @@ class InvoiceService(OCR):
        field_group =  expenseDocument.summary_groups
        receiver_bill_to = field_group['RECEIVER_BILL_TO']
        print(receiver_bill_to)
-       receiver_bill_address = Address(receiver_bill_to['NAME'],receiver_bill_to['STREET'],
-                                       receiver_bill_to['CITY'],receiver_bill_to['STATE'],
-                                       receiver_bill_to['ZIP_CODE'] )
+       receiver_bill_address = Address(receiver_bill_to.get('NAME'),receiver_bill_to.get('STREET'),
+                                       receiver_bill_to.get('CITY'),receiver_bill_to.get('STATE'),
+                                       receiver_bill_to.get('ZIP_CODE' ))
        print(receiver_ship_to)
-       receiver_ship_to = field_group['RECEIVER_SHIP_TO']
-       receiver_ship_address = Address(receiver_ship_to['NAME'],receiver_ship_to['STREET'],
-                                       receiver_ship_to['CITY'],receiver_ship_to['STATE'],
-                                       receiver_ship_to['ZIP_CODE'] )
+       receiver_ship_to = field_group.get('RECEIVER_SHIP_TO')
+       receiver_ship_address = Address(receiver_ship_to.get('NAME'),receiver_ship_to.get('STREET'),
+                                       receiver_ship_to.get('CITY'),receiver_ship_to.get('STATE'),
+                                       receiver_ship_to.get('ZIP_CODE' ))
        
-       vendor = field_group['VENDOR']
-       vendor_address =  Address(vendor['NAME'],vendor['STREET'],
-                                       vendor['CITY'],vendor['STATE'],
-                                       vendor['ZIP_CODE'] )
+       vendor = field_group.get('VENDOR')
+       vendor_address =  Address(vendor.get('NAME'),vendor.get('STREET'),
+                                       vendor.get('CITY'),vendor.get('STATE'),
+                                       vendor.get('ZIP_CODE'))
        
        line_items  = []
        for line_item in expenseDocument.line_items_groups:
-          line = LineItem(line_item['EXPENSE_ROW'],line_item['ITEM'],
-                    line_item['QUANTITY'],line_item['UNIT_PRICE'],line_item['PRICE'],
-                    line_item['PRODUCT_CODE'])
+          line = LineItem(line_item.get('EXPENSE_ROW'),line_item.get('ITEM'),
+                    line_item.get('QUANTITY'),line_item.get('UNIT_PRICE'),line_item.get('PRICE'),
+                    line_item.get('PRODUCT_CODE'))
           line_item.append(line)
 
        summary_fields  = expenseDocument.summary_fields
 
-       return ExpenseDocument(summary_fields['INVOICE_RECEIPT_DATE'],summary_fields['INVOICE_RECEIPT_ID'],
-                       summary_fields['PO_NUMBER'],summary_fields['PAYMENT_TERMS'],
-                       summary_fields['SUBTOTAL'],summary_fields['TAX'],summary_fields['TOTAL'],
+       return ExpenseDocument(summary_fields.get('INVOICE_RECEIPT_DATE'),summary_fields.get('INVOICE_RECEIPT_ID'),
+                       summary_fields.get('PO_NUMBER'),summary_fields.get('PAYMENT_TERMS'),
+                       summary_fields.get('SUBTOTAL'),summary_fields.get('TAX'),summary_fields.get('TOTAL'),
                        line_items,receiverBillTo = ReceiverBillTo(receiver_bill_address),
                        receiverShipTo=ReceverShipTo(receiver_ship_address),vendor=Vendor(vendor_address))
        
@@ -121,13 +121,13 @@ class IDService(OCR):
     
     def analyze_document(self, data: bytes):
        try:
-            print('I am here..')
+           
             document = textract_client.analyze_id(DocumentPages=[{'Bytes': data}]) 
             print(document)
-            print('I am here..1')  
+            
             id_details = response_parser.parse_analyze_id_response(document).identity_documents[0]
-            print('I am here..2')
-            return IDDocument(id_details['FIRST_NAME'],id_details['LAST_NAME'],id_details['MIDDLE_NAME'],
+            
+            return IDDocument(id_details.get('FIRST_NAME'),id_details['LAST_NAME'],id_details['MIDDLE_NAME'],
                         id_details['SUFFIX'],id_details['DOCUMENT_NUMBER'],id_details['EXPIRATION_DATE'],
                         id_details['DATE_OF_BIRTH'],id_details['STATE_NAME'],id_details['COUNTY'],id_details['DATE_OF_ISSUE'],
                         id_details['CLASS'],id_details['RESTRICTIONS'],id_details['ENDORSEMENTS'],
