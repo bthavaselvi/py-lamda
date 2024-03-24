@@ -99,6 +99,7 @@ class InvoiceService(OCR):
        
        line_items  = []
        print(expenseDocument.line_items_groups)
+       print(type( expenseDocument.line_items_groups))
        for line_item in expenseDocument.line_items_groups:
           
           line = LineItem(line_item.get('EXPENSE_ROW'),line_item.get('ITEM'),
@@ -109,6 +110,7 @@ class InvoiceService(OCR):
        summary_fields  = expenseDocument.summary_fields
 
        print(summary_fields)
+       print(type(summary_fields))
 
        return ExpenseDocument(summary_fields.get('INVOICE_RECEIPT_DATE'),summary_fields.get('INVOICE_RECEIPT_ID'),
                        summary_fields.get('PO_NUMBER'),summary_fields.get('PAYMENT_TERMS'),
@@ -122,6 +124,7 @@ class InvoiceService(OCR):
         
             response =  textract_client.analyze_expense(Document={'Bytes': data})   
             expense_document = response_parser.parser_analyze_expense_response(response).expense_documents[0]   
+            print(type(expense_document))
             print(expense_document)    
             expense_doc_to_return =  self.toExpenseDocument(expense_document)
             return expense_doc_to_return
