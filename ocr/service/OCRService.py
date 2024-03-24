@@ -111,10 +111,10 @@ class InvoiceService(OCR):
     def analyze_document(self, data: bytes):
         
             response =  textract_client.analyze_expense(Document={'Bytes': data})   
-            # expense_document = response_parser.parser_analyze_expense_response(response).expense_documents[0]       
-            # expense_doc_to_return =  self.toExpenseDocument(expense_document)
-            # return expense_doc_to_return
-            return json.load(response)
+            expense_document = response_parser.parser_analyze_expense_response(response).expense_documents[0]       
+            expense_doc_to_return =  self.toExpenseDocument(expense_document)
+            return expense_doc_to_return
+            
       
 class IDService(OCR):
     
