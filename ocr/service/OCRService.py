@@ -98,6 +98,7 @@ class InvoiceService(OCR):
                                             vendor.get('ZIP_CODE'))
        
        line_items  = []
+       print(expenseDocument.line_items_groups)
        for line_item in expenseDocument.line_items_groups:
           
           line = LineItem(line_item.get('EXPENSE_ROW'),line_item.get('ITEM'),
