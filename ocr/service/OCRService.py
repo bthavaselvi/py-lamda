@@ -77,10 +77,11 @@ class InvoiceService(OCR):
     def toExpenseDocument(self,expenseDocument):
        field_group =  expenseDocument.summary_groups
        receiver_bill_to = field_group['RECEIVER_BILL_TO']
+       print(receiver_bill_to)
        receiver_bill_address = Address(receiver_bill_to['NAME'],receiver_bill_to['STREET'],
                                        receiver_bill_to['CITY'],receiver_bill_to['STATE'],
                                        receiver_bill_to['ZIP_CODE'] )
-       
+       print(receiver_ship_to)
        receiver_ship_to = field_group['RECEIVER_SHIP_TO']
        receiver_ship_address = Address(receiver_ship_to['NAME'],receiver_ship_to['STREET'],
                                        receiver_ship_to['CITY'],receiver_ship_to['STATE'],
