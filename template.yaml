@@ -71,7 +71,7 @@ Resources:
       Policies:
        - CloudWatchLogsFullAccess
       Handler: lambda_function.lambda_handler
-      Runtime: python3.12.2
+      Runtime: python3.12
       Timeout: 10
       PackageType: Zip
       Role: !GetAtt LambdaExecutionRole.Arn
