@@ -76,31 +76,38 @@ class InvoiceService(OCR):
 
     def toExpenseDocument(self,expenseDocument):
        field_group =  expenseDocument.summary_groups
+       print(field_group)
        receiver_bill_to = field_group['RECEIVER_BILL_TO']
        print(receiver_bill_to)
-       receiver_bill_address = Address(receiver_bill_to.get('NAME'),receiver_bill_to.get('STREET'),
-                                       receiver_bill_to.get('CITY'),receiver_bill_to.get('STATE'),
-                                       receiver_bill_to.get('ZIP_CODE' ))
+       if receiver_bill_to is not None:
+            receiver_bill_address = Address(receiver_bill_to.get('NAME'),receiver_bill_to.get('STREET'),
+                                            receiver_bill_to.get('CITY'),receiver_bill_to.get('STATE'),
+                                            receiver_bill_to.get('ZIP_CODE' ))
        
        receiver_ship_to = field_group.get('RECEIVER_SHIP_TO')
        print(receiver_ship_to)
-       receiver_ship_address = Address(receiver_ship_to.get('NAME'),receiver_ship_to.get('STREET'),
-                                       receiver_ship_to.get('CITY'),receiver_ship_to.get('STATE'),
-                                       receiver_ship_to.get('ZIP_CODE' ))
-       
+       if receiver_ship_to is not None:
+            receiver_ship_address = Address(receiver_ship_to.get('NAME'),receiver_ship_to.get('STREET'),
+                                            receiver_ship_to.get('CITY'),receiver_ship_to.get('STATE'),
+                                            receiver_ship_to.get('ZIP_CODE' ))
+            
        vendor = field_group.get('VENDOR')
-       vendor_address =  Address(vendor.get('NAME'),vendor.get('STREET'),
-                                       vendor.get('CITY'),vendor.get('STATE'),
-                                       vendor.get('ZIP_CODE'))
+       if vendor is not None:
+            vendor_address =  Address(vendor.get('NAME'),vendor.get('STREET'),
+                                            vendor.get('CITY'),vendor.get('STATE'),
+                                            vendor.get('ZIP_CODE'))
        
        line_items  = []
        for line_item in expenseDocument.line_items_groups:
+          
           line = LineItem(line_item.get('EXPENSE_ROW'),line_item.get('ITEM'),
                     line_item.get('QUANTITY'),line_item.get('UNIT_PRICE'),line_item.get('PRICE'),
                     line_item.get('PRODUCT_CODE'))
           line_item.append(line)
 
        summary_fields  = expenseDocument.summary_fields
+
+       print(summary_fields)
 
        return ExpenseDocument(summary_fields.get('INVOICE_RECEIPT_DATE'),summary_fields.get('INVOICE_RECEIPT_ID'),
                        summary_fields.get('PO_NUMBER'),summary_fields.get('PAYMENT_TERMS'),
