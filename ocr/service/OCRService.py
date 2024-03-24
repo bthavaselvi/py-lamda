@@ -10,7 +10,7 @@ import boto3
 from response.ExpenseDocument import ReceiverBillTo,ReceverShipTo,Vendor,LineItem,ExpenseDocument
 from response.Address import Address
 from response.IDResponse import IDDocument
-import json
+
 
 log = logging.getLogger('my-logger')
 
@@ -125,7 +125,7 @@ class IDService(OCR):
             document = textract_client.analyze_id(DocumentPages=[{'Bytes': data}]) 
             print(document)
             print('I am here..1')  
-            id_details = document.identity_documents[0]
+            id_details = response_parser.parse_analyze_id_response(document).identity_documents[0]
             print('I am here..2')
             return IDDocument(id_details['FIRST_NAME'],id_details['LAST_NAME'],id_details['MIDDLE_NAME'],
                         id_details['SUFFIX'],id_details['DOCUMENT_NUMBER'],id_details['EXPIRATION_DATE'],
