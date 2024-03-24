@@ -81,8 +81,9 @@ class InvoiceService(OCR):
        receiver_bill_address = Address(receiver_bill_to.get('NAME'),receiver_bill_to.get('STREET'),
                                        receiver_bill_to.get('CITY'),receiver_bill_to.get('STATE'),
                                        receiver_bill_to.get('ZIP_CODE' ))
-       print(receiver_ship_to)
+       
        receiver_ship_to = field_group.get('RECEIVER_SHIP_TO')
+       print(receiver_ship_to)
        receiver_ship_address = Address(receiver_ship_to.get('NAME'),receiver_ship_to.get('STREET'),
                                        receiver_ship_to.get('CITY'),receiver_ship_to.get('STATE'),
                                        receiver_ship_to.get('ZIP_CODE' ))
