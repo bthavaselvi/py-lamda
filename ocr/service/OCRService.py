@@ -120,6 +120,7 @@ class IDService(OCR):
        try:
             print('I am here..')
             document = textract_client.analyze_id(DocumentPages=[{'Bytes': data}]) 
+            print(document)
             print('I am here..1')  
             id_details = document.identity_documents[0]
             print('I am here..2')
