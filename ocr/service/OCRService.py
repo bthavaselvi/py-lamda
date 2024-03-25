@@ -112,8 +112,11 @@ class InvoiceService(OCR):
         subTotal = None
         tax = None
         total = None
-
+        print(summary_fields)
+        print(type(summary_fields))
         for summary in summary_fields:
+             print(summary)
+             print(type(summary))
              if summary.type.text == 'INVOICE_RECEIPT_DATE':
                  invoiceReceiptDt = summary.value.text
              elif summary.type.text == 'INVOICE_RECEIPT_ID':
