@@ -101,7 +101,7 @@ class InvoiceService(OCR):
        print(expenseDocument.line_items_groups)
        print(type( expenseDocument.line_items_groups))
        for line_item in expenseDocument.line_items_groups:
-          
+          print(type(line_item))
           line = LineItem(line_item.get('EXPENSE_ROW'),line_item.get('ITEM'),
                     line_item.get('QUANTITY'),line_item.get('UNIT_PRICE'),line_item.get('PRICE'),
                     line_item.get('PRODUCT_CODE'))
