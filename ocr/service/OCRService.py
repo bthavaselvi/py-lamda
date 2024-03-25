@@ -74,6 +74,32 @@ class BusinessCardService(OCR):
 
 class InvoiceService(OCR):
 
+    def fromExpense(self,expense_filed) -> LineItem:
+        quantity = None
+        expense_row = None
+        item = None
+        unit_price = None
+        price = None
+        product_code = None
+
+
+        for expense in expense_filed:
+            if expense.type.text == 'EXPENSE_ROW':
+                expense_row = expense.value
+            elif expense.type == 'ITEM':
+                item = expense.value
+            elif expense.type == 'QUANTITY':
+                quantity = expense.value
+            elif expense.type == 'UNIT_PRICE':
+                unit_price = expense.value
+            elif expense.type == 'PRICE':
+                price = expense.value
+            elif expense.type == 'PRODUCT_CODE':
+                product_code = expense.value
+        
+        return LineItem(expense_row=expense_row,item=item,quantity=quantity,
+                        unitPrice= unit_price,price=price,productCode=product_code)
+
     def toExpenseDocument(self,expenseDocument):
        field_group =  expenseDocument.summary_groups
        print(field_group)
@@ -101,11 +127,7 @@ class InvoiceService(OCR):
        print(expenseDocument.line_items_groups)
        print(type( expenseDocument.line_items_groups))
        for line_item in expenseDocument.line_items_groups:
-          print(type(line_item))
-          line = LineItem(line_item.get('EXPENSE_ROW'),line_item.get('ITEM'),
-                    line_item.get('QUANTITY'),line_item.get('UNIT_PRICE'),line_item.get('PRICE'),
-                    line_item.get('PRODUCT_CODE'))
-          line_item.append(line)
+           line_item.append(self,fromExpense(line_item.expenses))
 
        summary_fields  = expenseDocument.summary_fields
 
