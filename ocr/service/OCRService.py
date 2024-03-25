@@ -156,8 +156,9 @@ class InvoiceService(OCR):
        line_items  = []
        print(expenseDocument.line_items_groups)
        print(type( expenseDocument.line_items_groups))
-       for line_item in expenseDocument.line_items_groups:
-           line_items.append(self.toExpense(line_item.expenses))
+       for line_item_group in expenseDocument.line_items_groups:
+           for row in line_item_group.rows:
+                line_items.append(self.toExpense(row.expenses))
 
        summary_fields  = self.toSummaryFields(self,expenseDocument.summary_fields)
 
