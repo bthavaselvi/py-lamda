@@ -10,6 +10,7 @@ import boto3
 from response.ExpenseDocument import ReceiverBillTo,ReceverShipTo,Vendor,LineItem,ExpenseDocument,SummaryFields
 from response.Address import Address
 from response.IDResponse import IDDocument
+from textractor.entities.expense_field import ExpenseField
 
 
 log = logging.getLogger('my-logger')
@@ -117,20 +118,21 @@ class InvoiceService(OCR):
         for summary in summary_fields:
              print(summary)
              print(type(summary))
-             if summary.type.text == 'INVOICE_RECEIPT_DATE':
-                 invoiceReceiptDt = summary.value.text
-             elif summary.type.text == 'INVOICE_RECEIPT_ID':
-                 invoiceReceiptId = summary.value.text
-             elif summary.type.text == 'PO_NUMBER':
-                  poNumber = summary.value.text
-             elif summary.type.text == 'PAYMENT_TERMS':
-                  paymentTerms = summary.value.text
-             elif summary.type.text ==  'SUBTOTAL':
-                  subTotal = summary.value.text
-             elif summary.type.text == 'TOTAL':
-                  total = summary.value.text
-             elif summary.type.text == 'TAX':
-                 tax = summary.value.text
+             if type(summary) is ExpenseField:
+                if summary.type.text == 'INVOICE_RECEIPT_DATE':
+                    invoiceReceiptDt = summary.value.text
+                elif summary.type.text == 'INVOICE_RECEIPT_ID':
+                    invoiceReceiptId = summary.value.text
+                elif summary.type.text == 'PO_NUMBER':
+                    poNumber = summary.value.text
+                elif summary.type.text == 'PAYMENT_TERMS':
+                    paymentTerms = summary.value.text
+                elif summary.type.text ==  'SUBTOTAL':
+                    subTotal = summary.value.text
+                elif summary.type.text == 'TOTAL':
+                    total = summary.value.text
+                elif summary.type.text == 'TAX':
+                    tax = summary.value.text
             
         return SummaryFields(invoiceReceiptDate=invoiceReceiptDt,invoiceReceiptId=invoiceReceiptId,
                              poNumber=poNumber,paymentTerm=paymentTerms,subTotal=subTotal,total=total,tax=tax)
