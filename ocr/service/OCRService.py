@@ -136,7 +136,7 @@ class InvoiceService(OCR):
        field_group =  expenseDocument.summary_groups
        receiver_bill_address = None
        receiver_ship_address = None
-       receiver_bill_to = field_group['RECEIVER_BILL_TO']
+       receiver_bill_to = field_group.get('RECEIVER_BILL_TO')
        
        if receiver_bill_to is not None:
             receiver_bill_address = Address(receiver_bill_to.get('NAME'),receiver_bill_to.get('STREET'),
