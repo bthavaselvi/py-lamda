@@ -82,7 +82,8 @@ class InvoiceService(OCR):
         price = None
         product_code = None
 
-
+        print('Expense')
+        print(type(expense_filed))
         for expense in expense_filed:
             if expense.type.text == 'EXPENSE_ROW':
                 expense_row = expense.value.text
