@@ -22,12 +22,10 @@ class LineItem:
         self.price = price
         self.productCode = productCode
 
-class ExpenseDocument:
+class SummaryFields:
     def __init__(self,invoiceReceiptDate:str,invoiceReceiptId:str,poNumber:str,
                  paymentTerm:str, subTotal:Decimal, tax: Decimal,
-                 total:Decimal,lineItems : list[LineItem],receiverBillTo:ReceiverBillTo,
-                 receiverShipTo:ReceverShipTo,vendor:Vendor):
-        self.lineItems = lineItems
+                 total:Decimal):
         self.invoiceReceiptDate = invoiceReceiptDate
         self.invoiceReceiptId = invoiceReceiptId
         self.poNumber = poNumber
@@ -35,6 +33,12 @@ class ExpenseDocument:
         self.subTotal = subTotal
         self.tax = tax
         self.total = total
+
+class ExpenseDocument:
+    def __init__(self,summaryFields :SummaryFields,lineItems : list[LineItem],receiverBillTo:ReceiverBillTo,
+                 receiverShipTo:ReceverShipTo,vendor:Vendor):
+        self.lineItems = lineItems
+        self.summaryFields = summaryFields
         self.lineItems = lineItems
         
         

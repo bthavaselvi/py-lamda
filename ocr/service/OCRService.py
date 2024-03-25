@@ -7,7 +7,7 @@ from response.BusinessCard import BusinessCard
 import traceback
 import logging
 import boto3
-from response.ExpenseDocument import ReceiverBillTo,ReceverShipTo,Vendor,LineItem,ExpenseDocument
+from response.ExpenseDocument import ReceiverBillTo,ReceverShipTo,Vendor,LineItem,ExpenseDocument,SummaryFields
 from response.Address import Address
 from response.IDResponse import IDDocument
 
@@ -74,7 +74,7 @@ class BusinessCardService(OCR):
 
 class InvoiceService(OCR):
 
-    def fromExpense(self,expense_filed) -> LineItem:
+    def toExpense(self,expense_filed) -> LineItem:
         quantity = None
         expense_row = None
         item = None
@@ -99,6 +99,36 @@ class InvoiceService(OCR):
         
         return LineItem(expense_row=expense_row,item=item,quantity=quantity,
                         unitPrice= unit_price,price=price,productCode=product_code)
+
+    def toSummaryFields(self,summary_fields) -> SummaryFields:
+       
+        invoiceReceiptDt = None
+        invoiceReceiptId = None
+        poNumber = None
+        paymentTerms = None
+        subTotal = None
+        tax = None
+        total = None
+
+        for summary in summary_fields:
+             if summary.type == 'INVOICE_RECEIPT_DATE':
+                 invoiceReceiptDt = summary.value
+             elif summary.type == 'INVOICE_RECEIPT_ID':
+                 invoiceReceiptId = summary.value
+             elif summary.type == 'PO_NUMBER':
+                  poNumber = summary.value
+             elif summary.type == 'PAYMENT_TERMS':
+                  paymentTerms = summary.value
+             elif summary.type ==  'SUBTOTAL':
+                  subTotal = summary.value
+             elif summary.type == 'TOTAL':
+                  total = summary.value
+             elif summary.type == 'TAX':
+                 tax = summary.value
+            
+        return SummaryFields(invoiceReceiptDate=invoiceReceiptDt,invoiceReceiptId=invoiceReceiptId,
+                             poNumber=poNumber,paymentTerm=paymentTerms,subTotal=subTotal,total=total,tax=tax)
+
 
     def toExpenseDocument(self,expenseDocument):
        field_group =  expenseDocument.summary_groups
@@ -129,15 +159,13 @@ class InvoiceService(OCR):
        for line_item in expenseDocument.line_items_groups:
            line_item.append(self,fromExpense(line_item.expenses))
 
-       summary_fields  = expenseDocument.summary_fields
+       summary_fields  = toSummaryFields(self,expenseDocument.summary_fields)
 
        print(summary_fields)
        print(type(summary_fields))
 
-       return ExpenseDocument(summary_fields.get('INVOICE_RECEIPT_DATE'),summary_fields.get('INVOICE_RECEIPT_ID'),
-                       summary_fields.get('PO_NUMBER'),summary_fields.get('PAYMENT_TERMS'),
-                       summary_fields.get('SUBTOTAL'),summary_fields.get('TAX'),summary_fields.get('TOTAL'),
-                       line_items,receiverBillTo = ReceiverBillTo(receiver_bill_address),
+       return ExpenseDocument(summaryFields=summary_fields,
+                       lineItems=line_items,receiverBillTo = ReceiverBillTo(receiver_bill_address),
                        receiverShipTo=ReceverShipTo(receiver_ship_address),vendor=Vendor(vendor_address))
        
            
