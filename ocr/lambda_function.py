@@ -18,7 +18,7 @@ def analyze_document():
         file_content = file.read()
         service_to_call = OCRServiceFactory().create_OCR_service(document_type)
         data = service_to_call.analyze_document(data=file_content)
-        return jsonify(json.dumps(data, default=lambda o: o.__dict__)),200,{'content-type':'application/json'}
+        return json.dumps(data, default=lambda o: o.__dict__),200,{'content-type':'application/json'}
     except Exception as e:
         logging.error(e)
         return jsonify({'error': str(e)}), 500
