@@ -82,10 +82,6 @@ class InvoiceService(OCR):
         unit_price = None
         price = None
         product_code = None
-
-        print('Expense')
-        print(type(expense_filed))
-        print(expense_filed)
         for expense in expense_filed:
             print(type(expense))
             if expense.type.text == 'EXPENSE_ROW':
@@ -113,11 +109,8 @@ class InvoiceService(OCR):
         subTotal = None
         tax = None
         total = None
-        print(summary_fields)
-        print(type(summary_fields))
+
         for summary in summary_fields:
-             print(summary)
-             print(type(summary))
              if type(summary) is ExpenseField:
                 if summary.type.text == 'INVOICE_RECEIPT_DATE':
                     invoiceReceiptDt = summary.value.text
@@ -140,16 +133,17 @@ class InvoiceService(OCR):
 
     def toExpenseDocument(self,expenseDocument):
        field_group =  expenseDocument.summary_groups
-       print(field_group)
+       receiver_bill_address = None
+       receiver_ship_address = None
        receiver_bill_to = field_group['RECEIVER_BILL_TO']
-       print(receiver_bill_to)
+       
        if receiver_bill_to is not None:
             receiver_bill_address = Address(receiver_bill_to.get('NAME'),receiver_bill_to.get('STREET'),
                                             receiver_bill_to.get('CITY'),receiver_bill_to.get('STATE'),
                                             receiver_bill_to.get('ZIP_CODE' ))
        
        receiver_ship_to = field_group.get('RECEIVER_SHIP_TO')
-       print(receiver_ship_to)
+      
        if receiver_ship_to is not None:
             receiver_ship_address = Address(receiver_ship_to.get('NAME'),receiver_ship_to.get('STREET'),
                                             receiver_ship_to.get('CITY'),receiver_ship_to.get('STATE'),
@@ -162,16 +156,12 @@ class InvoiceService(OCR):
                                             vendor.get('ZIP_CODE'))
        
        line_items  = []
-       print(expenseDocument.line_items_groups)
-       print(type( expenseDocument.line_items_groups))
+      
        for line_item_group in expenseDocument.line_items_groups:
            for row in line_item_group.rows:
                 line_items.append(self.toExpense(row.expenses))
 
        summary_fields  = self.toSummaryFields(expenseDocument.summary_fields)
-
-       print(summary_fields)
-       print(type(summary_fields))
 
        return ExpenseDocument(summaryFields=summary_fields,
                        lineItems=line_items,receiverBillTo = ReceiverBillTo(receiver_bill_address),
@@ -183,8 +173,6 @@ class InvoiceService(OCR):
         
             response =  textract_client.analyze_expense(Document={'Bytes': data})   
             expense_document = response_parser.parser_analyze_expense_response(response).expense_documents[0]   
-            print(type(expense_document))
-            print(expense_document)    
             expense_doc_to_return =  self.toExpenseDocument(expense_document)
             return expense_doc_to_return
             
@@ -195,8 +183,6 @@ class IDService(OCR):
        try:
            
             document = textract_client.analyze_id(DocumentPages=[{'Bytes': data}]) 
-            print(document)
-            
             id_details = response_parser.parse_analyze_id_response(document).identity_documents[0]
             
             return IDDocument(id_details.get('FIRST_NAME'),id_details['LAST_NAME'],id_details['MIDDLE_NAME'],
