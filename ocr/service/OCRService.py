@@ -85,17 +85,17 @@ class InvoiceService(OCR):
 
         for expense in expense_filed:
             if expense.type.text == 'EXPENSE_ROW':
-                expense_row = expense.value
-            elif expense.type == 'ITEM':
-                item = expense.value
-            elif expense.type == 'QUANTITY':
-                quantity = expense.value
-            elif expense.type == 'UNIT_PRICE':
-                unit_price = expense.value
-            elif expense.type == 'PRICE':
-                price = expense.value
-            elif expense.type == 'PRODUCT_CODE':
-                product_code = expense.value
+                expense_row = expense.value.text
+            elif expense.type.text == 'ITEM':
+                item = expense.value.text
+            elif expense.type.text == 'QUANTITY':
+                quantity = expense.value.text
+            elif expense.type.text == 'UNIT_PRICE':
+                unit_price = expense.value.text
+            elif expense.type.text == 'PRICE':
+                price = expense.value.text
+            elif expense.type.text == 'PRODUCT_CODE':
+                product_code = expense.value.text
         
         return LineItem(expenseRowNumber=expense_row,item=item,quantity=quantity,
                         unitPrice= unit_price,price=price,productCode=product_code)
@@ -111,20 +111,20 @@ class InvoiceService(OCR):
         total = None
 
         for summary in summary_fields:
-             if summary.type == 'INVOICE_RECEIPT_DATE':
-                 invoiceReceiptDt = summary.value
-             elif summary.type == 'INVOICE_RECEIPT_ID':
-                 invoiceReceiptId = summary.value
-             elif summary.type == 'PO_NUMBER':
-                  poNumber = summary.value
-             elif summary.type == 'PAYMENT_TERMS':
-                  paymentTerms = summary.value
-             elif summary.type ==  'SUBTOTAL':
-                  subTotal = summary.value
-             elif summary.type == 'TOTAL':
-                  total = summary.value
-             elif summary.type == 'TAX':
-                 tax = summary.value
+             if summary.type.text == 'INVOICE_RECEIPT_DATE':
+                 invoiceReceiptDt = summary.value.text
+             elif summary.type.text == 'INVOICE_RECEIPT_ID':
+                 invoiceReceiptId = summary.value.text
+             elif summary.type.text == 'PO_NUMBER':
+                  poNumber = summary.value.text
+             elif summary.type.text == 'PAYMENT_TERMS':
+                  paymentTerms = summary.value.text
+             elif summary.type.text ==  'SUBTOTAL':
+                  subTotal = summary.value.text
+             elif summary.type.text == 'TOTAL':
+                  total = summary.value.text
+             elif summary.type.text == 'TAX':
+                 tax = summary.value.text
             
         return SummaryFields(invoiceReceiptDate=invoiceReceiptDt,invoiceReceiptId=invoiceReceiptId,
                              poNumber=poNumber,paymentTerm=paymentTerms,subTotal=subTotal,total=total,tax=tax)
