@@ -160,7 +160,7 @@ class InvoiceService(OCR):
            for row in line_item_group.rows:
                 line_items.append(self.toExpense(row.expenses))
 
-       summary_fields  = self.toSummaryFields(self,expenseDocument.summary_fields)
+       summary_fields  = self.toSummaryFields(expenseDocument.summary_fields)
 
        print(summary_fields)
        print(type(summary_fields))
