@@ -97,7 +97,7 @@ class InvoiceService(OCR):
             elif expense.type == 'PRODUCT_CODE':
                 product_code = expense.value
         
-        return LineItem(expense_row=expense_row,item=item,quantity=quantity,
+        return LineItem(expenseRowNumber=expense_row,item=item,quantity=quantity,
                         unitPrice= unit_price,price=price,productCode=product_code)
 
     def toSummaryFields(self,summary_fields) -> SummaryFields:
