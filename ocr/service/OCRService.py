@@ -112,7 +112,7 @@ class InvoiceService(OCR):
 
         for summary in summary_fields:
              print(type(summary))
-             if type(summary) is ExpenseField:
+             if type(summary) is textractor.entities.expense_field.ExpenseField:
                 if summary.type.text == 'INVOICE_RECEIPT_DATE':
                     invoiceReceiptDt = summary.value.text
                 elif summary.type.text == 'INVOICE_RECEIPT_ID':
