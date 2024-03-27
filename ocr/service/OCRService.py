@@ -112,6 +112,7 @@ class InvoiceService(OCR):
 
         for summary in summary_fields:
              print(type(summary))
+             print(summary)
              if isinstance(summary,ExpenseField):
                 if summary.type.text == 'INVOICE_RECEIPT_DATE':
                     invoiceReceiptDt = summary.value.text
