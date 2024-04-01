@@ -40,5 +40,8 @@ class ExpenseDocument:
         self.lineItems = lineItems
         self.summaryFields = summaryFields
         self.lineItems = lineItems
+        self.receiverBillTo = receiverBillTo
+        self.receiverShipto = receiverShipTo
+        self.vendor  = vendor
         
         
