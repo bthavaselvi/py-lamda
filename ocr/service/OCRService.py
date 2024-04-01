@@ -145,6 +145,8 @@ class InvoiceService(OCR):
        print(type(receiver_bill_to))
        
        if receiver_bill_to is not None:
+            print('recever bill is not null')
+            print(receiver_bill_to.get('CITY'))
             receiver_bill_address = Address(receiver_bill_to.get('NAME'),receiver_bill_to.get('STREET'),
                                             receiver_bill_to.get('CITY'),receiver_bill_to.get('STATE'),
                                             receiver_bill_to.get('ZIP_CODE' ),receiver_bill_to.get('ADDRESS (Address)'))
@@ -155,6 +157,7 @@ class InvoiceService(OCR):
        print('shipto')
        print(ReceverShipTo)
        if receiver_ship_to is not None:
+            print('ship to is not null')
             receiver_ship_address = Address(receiver_ship_to.get('NAME'),receiver_ship_to.get('STREET'),
                                             receiver_ship_to.get('CITY'),receiver_ship_to.get('STATE'),
                                             receiver_ship_to.get('ZIP_CODE' ),receiver_ship_to.get('ADDRESS (Address)'))
