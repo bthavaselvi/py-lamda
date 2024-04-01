@@ -111,8 +111,7 @@ class InvoiceService(OCR):
         total = None
 
         for summary in summary_fields:
-             print(type(summary))
-             print(summary)
+            
              if isinstance(summary,ExpenseField):
                 if summary.type.text == 'INVOICE_RECEIPT_DATE':
                     invoiceReceiptDt = summary.value.text
@@ -146,6 +145,8 @@ class InvoiceService(OCR):
        
        if receiver_bill_to is not None:
             print('recever bill is not null')
+            print(type(receiver_bill_to))
+            print(receiver_bill_to)
             print(receiver_bill_to.get('CITY'))
             receiver_bill_address = Address(receiver_bill_to.get('NAME'),receiver_bill_to.get('STREET'),
                                             receiver_bill_to.get('CITY'),receiver_bill_to.get('STATE'),
@@ -158,6 +159,8 @@ class InvoiceService(OCR):
        print(ReceverShipTo)
        if receiver_ship_to is not None:
             print('ship to is not null')
+            print(type(receiver_ship_to))
+            print(receiver_ship_to)
             receiver_ship_address = Address(receiver_ship_to.get('NAME'),receiver_ship_to.get('STREET'),
                                             receiver_ship_to.get('CITY'),receiver_ship_to.get('STATE'),
                                             receiver_ship_to.get('ZIP_CODE' ),receiver_ship_to.get('ADDRESS (Address)'))
