@@ -19,6 +19,8 @@ def analyze_document():
         file_content = file.read()
         service_to_call = OCRServiceFactory().create_OCR_service(document_type)
         data = service_to_call.analyze_document(data=file_content,raw=raw)
+        if raw:
+            json.dumps(data.__dict__),200,{'content-type':'application/json'}
         return json.dumps(data, default=lambda o: o.__dict__),200,{'content-type':'application/json'}
     except Exception as e:
         logging.error(e)
