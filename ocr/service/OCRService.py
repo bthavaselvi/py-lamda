@@ -147,7 +147,9 @@ class InvoiceService(OCR):
        if receiver_bill_to is not None:
             receiver_bill_address = Address(receiver_bill_to.get('NAME'),receiver_bill_to.get('STREET'),
                                             receiver_bill_to.get('CITY'),receiver_bill_to.get('STATE'),
-                                            receiver_bill_to.get('ZIP_CODE' ))
+                                            receiver_bill_to.get('ZIP_CODE' ),receiver_bill_to.get('ADDRESS (Address)'))
+       else:
+           print('recever bill is None')
        
        receiver_ship_to = field_group.get('RECEIVER_SHIP_TO')
        print('shipto')
@@ -155,7 +157,9 @@ class InvoiceService(OCR):
        if receiver_ship_to is not None:
             receiver_ship_address = Address(receiver_ship_to.get('NAME'),receiver_ship_to.get('STREET'),
                                             receiver_ship_to.get('CITY'),receiver_ship_to.get('STATE'),
-                                            receiver_ship_to.get('ZIP_CODE' ))
+                                            receiver_ship_to.get('ZIP_CODE' ),receiver_ship_to.get('ADDRESS (Address)'))
+       else:
+           print('ship to is null')
             
        vendor = field_group.get('VENDOR')
        print(vendor)
@@ -163,7 +167,7 @@ class InvoiceService(OCR):
        if vendor is not None:
             vendor_address =  Address(vendor.get('NAME'),vendor.get('STREET'),
                                             vendor.get('CITY'),vendor.get('STATE'),
-                                            vendor.get('ZIP_CODE'))
+                                            vendor.get('ZIP_CODE'),vendor.get('ADDRESS (Address)'))
        
        line_items  = []
       
