@@ -137,6 +137,7 @@ class InvoiceService(OCR):
        field_group =  expenseDocument.summary_groups
        receiver_bill_address = None
        receiver_ship_address = None
+       vendor_address = None
        receiver_bill_to = field_group.get('RECEIVER_BILL_TO')
        print(receiver_bill_to)
        print('billTo')
