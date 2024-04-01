@@ -21,12 +21,12 @@ textract_client =boto3.client('textract', region_name=region_name)
 
 class OCR:
     @abstractmethod
-    def analyze_document(self,data: bytes):
+    def analyze_document(self,data: bytes,raw:bool):
         pass
 
 class BusinessCardService(OCR):
 
-    def analyze_document(self, data: bytes):
+    def analyze_document(self, data: bytes,raw:bool):
         try:
             response = textract_client.analyze_document(Document={'Bytes': data},
                             FeatureTypes=["QUERIES"],
@@ -177,17 +177,20 @@ class InvoiceService(OCR):
        
            
 
-    def analyze_document(self, data: bytes):
+    def analyze_document(self, data: bytes,raw:bool):
         
             response =  textract_client.analyze_expense(Document={'Bytes': data})   
-            expense_document = response_parser.parser_analyze_expense_response(response).expense_documents[0]   
+          
+            expense_document = response_parser.parser_analyze_expense_response(response).expense_documents[0]    expense_document
+            if raw:
+             return expense_document
             expense_doc_to_return =  self.toExpenseDocument(expense_document)
             return expense_doc_to_return
             
       
 class IDService(OCR):
     
-    def analyze_document(self, data: bytes):
+    def analyze_document(self, data: bytes,raw:bool):
        try:
            
             document = textract_client.analyze_id(DocumentPages=[{'Bytes': data}]) 
