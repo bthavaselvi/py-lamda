@@ -138,10 +138,12 @@ class InvoiceService(OCR):
        receiver_bill_address = None
        receiver_ship_address = None
        vendor_address = None
+       print(field_group)
        receiver_bill_to = field_group.get('RECEIVER_BILL_TO')
        print(receiver_bill_to)
        print('billTo')
-       print(field_group)
+       print(type(receiver_bill_to))
+       
        if receiver_bill_to is not None:
             receiver_bill_address = Address(receiver_bill_to.get('NAME'),receiver_bill_to.get('STREET'),
                                             receiver_bill_to.get('CITY'),receiver_bill_to.get('STATE'),
