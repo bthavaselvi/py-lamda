@@ -42,11 +42,18 @@
 #     VENDOR_URL = "VENDOR_URL"
 #     VENDOR_VAT_NUMBER = "VENDOR_VAT_NUMBER"
 #     ZIP_CODE = "ZIP_CODE"
-# from dataclasses import dataclass
-# class ReceiptSummary:
-#    address: str
-#    accountNumber : str
-#    addressBlock: str
-#    amountDue: float
-#    amountPaid: float
-#    city: str
+from dataclasses import dataclass
+from response.Address import Address
+from response.LineItem import LineItem
+class ReceiptSummary:
+   address: Address
+   accountNumber: str
+   amountDue: float
+   amountPaid: float
+   customerNumber: str
+   discount: float
+   gratuity: float
+   name: str
+   invoiceReceiptDate: str
+   orderDate: str
+   

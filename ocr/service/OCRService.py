@@ -147,7 +147,7 @@ class InvoiceService(OCR):
             print('recever bill is not null')
             print(type(receiver_bill_to))
             print(receiver_bill_to)
-            print(receiver_bill_to.get('CITY'))
+            print(receiver_bill_to.get("CITY"))
             receiver_bill_address = Address(receiver_bill_to.get('NAME'),receiver_bill_to.get('STREET'),
                                             receiver_bill_to.get('CITY'),receiver_bill_to.get('STATE'),
                                             receiver_bill_to.get('ZIP_CODE' ),receiver_bill_to.get('ADDRESS (Address)'))
