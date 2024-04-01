@@ -140,6 +140,7 @@ class InvoiceService(OCR):
        receiver_bill_to = field_group.get('RECEIVER_BILL_TO')
        print(receiver_bill_to)
        print('billTo')
+       print(field_group)
        if receiver_bill_to is not None:
             receiver_bill_address = Address(receiver_bill_to.get('NAME'),receiver_bill_to.get('STREET'),
                                             receiver_bill_to.get('CITY'),receiver_bill_to.get('STATE'),
