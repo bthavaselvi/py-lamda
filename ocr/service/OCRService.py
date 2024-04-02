@@ -140,7 +140,7 @@ class InvoiceService(OCR):
 
        receiver_bill_to = field_group.get('RECEIVER_BILL_TO')
   
-       for key, group in self.items():
+       for key, group in field_group.items():
             print(key)
             print(type(key))
             for block in group.values():
