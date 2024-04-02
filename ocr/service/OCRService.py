@@ -142,6 +142,11 @@ class InvoiceService(OCR):
        print(receiver_bill_to)
        print('billTo')
        print(type(receiver_bill_to))
+
+       for fg in field_group.values():
+           print(fg)
+           for g in fg.values():
+               print(g)
        
        if receiver_bill_to is not None:
             print('recever bill is not null')
