@@ -132,6 +132,18 @@ class InvoiceService(OCR):
                              poNumber=poNumber,paymentTerm=paymentTerms,subTotal=subTotal,total=total,tax=tax)
 
 
+    def extract_address(self,expense_fields) -> Address:
+        street = ''
+        city = ''
+        state = ''
+        zip_code = ''
+        name = ''
+        for expense_field in expense_fields:
+            if isinstance(expense_field,ExpenseField):
+                 if expense_field.type.text == 'STREET':
+                    street = expense_field.value.text
+        return Address(name=name,street=street,city=city,state=state,zip_code=zip_code)
+
     def toExpenseDocument(self,expenseDocument):
        field_group =  expenseDocument.summary_groups
        receiver_bill_address = None
@@ -140,22 +152,14 @@ class InvoiceService(OCR):
 
        receiver_bill_to = field_group.get('RECEIVER_BILL_TO')
   
-       for key, group in field_group.items():
-            print(key)
-            print(type(key))
-            for block in group.values():
-                print('block')
-                print(block)
-                print(type(block))
+       for block in receiver_bill_to.values():
                 for expense_field in block:
                     print(expense_field)
                     print(type(expense_field))
        
        if receiver_bill_to is not None:
      
-            receiver_bill_address = Address(receiver_bill_to.get('NAME'),receiver_bill_to.get('STREET'),
-                                            receiver_bill_to.get('CITY'),receiver_bill_to.get('STATE'),
-                                            receiver_bill_to.get('ZIP_CODE' ),receiver_bill_to.get('ADDRESS (Address)'))
+            receiver_bill_address = self.extract_address(receiver_bill_to.values())
       
        
        receiver_ship_to = field_group.get('RECEIVER_SHIP_TO')
