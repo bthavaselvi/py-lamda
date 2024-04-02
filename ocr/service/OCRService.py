@@ -132,21 +132,22 @@ class InvoiceService(OCR):
                              poNumber=poNumber,paymentTerm=paymentTerms,subTotal=subTotal,total=total,tax=tax)
 
 
-    def extract_address(self,expense_fields) -> Address:
+    def extract_address(self,blocks) -> Address:
         street = ''
         city = ''
         state = ''
         zip_code = ''
         name = ''
         address_block = ''
-        for expense_field in expense_fields:
-            print(type(expense_field))
-            if isinstance(expense_field,ExpenseField):
-                 print(expense_field.type.text)
-                 if expense_field.type.text == 'STREET':
-                    street = expense_field.value.text
-            else:
-                print('this is not expense filed')
+        for block in blocks:
+            for expense_field in block:
+                print(type(expense_field))
+                if isinstance(expense_field,ExpenseField):
+                    print(expense_field.type.text)
+                    if expense_field.type.text == 'STREET':
+                        street = expense_field.value.text
+                else:
+                    print('this is not expense filed')
         return Address(name=name,street=street,city=city,state=state,zip_code=zip_code,address=address_block)
 
     def toExpenseDocument(self,expenseDocument):
