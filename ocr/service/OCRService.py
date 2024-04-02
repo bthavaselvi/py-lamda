@@ -138,11 +138,12 @@ class InvoiceService(OCR):
         state = ''
         zip_code = ''
         name = ''
+        address_block = ''
         for expense_field in expense_fields:
             if isinstance(expense_field,ExpenseField):
                  if expense_field.type.text == 'STREET':
                     street = expense_field.value.text
-        return Address(name=name,street=street,city=city,state=state,zip_code=zip_code)
+        return Address(name=name,street=street,city=city,state=state,zip_code=zip_code,address=address_block)
 
     def toExpenseDocument(self,expenseDocument):
        field_group =  expenseDocument.summary_groups
