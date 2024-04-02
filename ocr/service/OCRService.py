@@ -141,8 +141,11 @@ class InvoiceService(OCR):
         address_block = ''
         for expense_field in expense_fields:
             if isinstance(expense_field,ExpenseField):
+                 print(expense_field.type.text)
                  if expense_field.type.text == 'STREET':
                     street = expense_field.value.text
+            else:
+                print('this is not expense filed')
         return Address(name=name,street=street,city=city,state=state,zip_code=zip_code,address=address_block)
 
     def toExpenseDocument(self,expenseDocument):
@@ -153,10 +156,10 @@ class InvoiceService(OCR):
 
        receiver_bill_to = field_group.get('RECEIVER_BILL_TO')
   
-       for block in receiver_bill_to.values():
-                for expense_field in block:
-                    print(expense_field)
-                    print(type(expense_field))
+    #    for block in receiver_bill_to.values():
+    #             for expense_field in block:
+    #                 print(expense_field)
+    #                 print(type(expense_field))
        
        if receiver_bill_to is not None:
      
