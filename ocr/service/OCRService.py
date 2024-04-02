@@ -140,6 +140,7 @@ class InvoiceService(OCR):
         name = ''
         address_block = ''
         for expense_field in expense_fields:
+            print(type(expense_field))
             if isinstance(expense_field,ExpenseField):
                  print(expense_field.type.text)
                  if expense_field.type.text == 'STREET':
