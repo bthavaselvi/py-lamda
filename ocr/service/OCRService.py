@@ -141,13 +141,21 @@ class InvoiceService(OCR):
         address_block = ''
         for block in blocks:
             for expense_field in block:
-                print(type(expense_field))
                 if isinstance(expense_field,ExpenseField):
                     print(expense_field.type.text)
                     if expense_field.type.text == 'STREET':
                         street = expense_field.value.text
-                else:
-                    print('this is not expense filed')
+                    if expense_field.type.text == 'CITY':
+                        city = expense_field.value.text
+                    if expense_field.type.text == 'STATE':
+                        state = expense_field.value.text
+                    if expense_field.type.text == 'ZIP_CODE':
+                        zip_code = expense_field.value.text
+                    if expense_field.type.text == 'ADDRESS_BLOCK':
+                        city = expense_field.value.text
+                    if expense_field.type.text == 'NAME':
+                        name = expense_field.value.text
+
         return Address(name=name,street=street,city=city,state=state,zip_code=zip_code,address=address_block)
 
     def toExpenseDocument(self,expenseDocument):
@@ -158,11 +166,6 @@ class InvoiceService(OCR):
 
        receiver_bill_to = field_group.get('RECEIVER_BILL_TO')
   
-    #    for block in receiver_bill_to.values():
-    #             for expense_field in block:
-    #                 print(expense_field)
-    #                 print(type(expense_field))
-       
        if receiver_bill_to is not None:
      
             receiver_bill_address = self.extract_address(receiver_bill_to.values())
@@ -172,17 +175,13 @@ class InvoiceService(OCR):
   
        if receiver_ship_to is not None:
 
-            receiver_ship_address = Address(receiver_ship_to.get('NAME'),receiver_ship_to.get('STREET'),
-                                            receiver_ship_to.get('CITY'),receiver_ship_to.get('STATE'),
-                                            receiver_ship_to.get('ZIP_CODE' ),receiver_ship_to.get('ADDRESS (Address)'))
+            receiver_ship_address =  self.extract_address(receiver_ship_to.values())
       
             
        vendor = field_group.get('VENDOR')
       
        if vendor is not None:
-            vendor_address =  Address(vendor.get('NAME'),vendor.get('STREET'),
-                                            vendor.get('CITY'),vendor.get('STATE'),
-                                            vendor.get('ZIP_CODE'),vendor.get('ADDRESS (Address)'))
+            vendor_address =  self.extract_address(vendor.values())
        
        line_items  = []
       
