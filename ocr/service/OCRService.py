@@ -137,44 +137,38 @@ class InvoiceService(OCR):
        receiver_bill_address = None
        receiver_ship_address = None
        vendor_address = None
-       print(field_group)
-       receiver_bill_to = field_group.get('RECEIVER_BILL_TO')
-       print(receiver_bill_to)
-       print('billTo')
-       print(type(receiver_bill_to))
 
-       for fg in field_group.values():
-           print(fg)
-           for g in fg.values():
-               print(g)
+       receiver_bill_to = field_group.get('RECEIVER_BILL_TO')
+  
+       for key, group in self.items():
+            print(key)
+            print(type(key))
+            for block in group.values():
+                print('block')
+                print(block)
+                print(type(block))
+                for expense_field in block:
+                    print(expense_field)
+                    print(type(expense_field))
        
        if receiver_bill_to is not None:
-            print('recever bill is not null')
-            print(type(receiver_bill_to))
-            print(receiver_bill_to)
-            print(receiver_bill_to.get(0))
+     
             receiver_bill_address = Address(receiver_bill_to.get('NAME'),receiver_bill_to.get('STREET'),
                                             receiver_bill_to.get('CITY'),receiver_bill_to.get('STATE'),
                                             receiver_bill_to.get('ZIP_CODE' ),receiver_bill_to.get('ADDRESS (Address)'))
-       else:
-           print('recever bill is None')
+      
        
        receiver_ship_to = field_group.get('RECEIVER_SHIP_TO')
-       print('shipto')
-       print(ReceverShipTo)
+  
        if receiver_ship_to is not None:
-            print('ship to is not null')
-            print(type(receiver_ship_to))
-            print(receiver_ship_to)
+
             receiver_ship_address = Address(receiver_ship_to.get('NAME'),receiver_ship_to.get('STREET'),
                                             receiver_ship_to.get('CITY'),receiver_ship_to.get('STATE'),
                                             receiver_ship_to.get('ZIP_CODE' ),receiver_ship_to.get('ADDRESS (Address)'))
-       else:
-           print('ship to is null')
+      
             
        vendor = field_group.get('VENDOR')
-       print(vendor)
-       print('vendor')
+      
        if vendor is not None:
             vendor_address =  Address(vendor.get('NAME'),vendor.get('STREET'),
                                             vendor.get('CITY'),vendor.get('STATE'),
