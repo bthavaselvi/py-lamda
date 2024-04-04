@@ -14,6 +14,8 @@ logger.setLevel('INFO')
 def analyze_document():
     try:
         data = None
+        print('Conyrny type:')
+        print( request.headers['Content-Type'])
         if request.headers['Content-Type'] == 'application/json':
              
              json_data = request.json
