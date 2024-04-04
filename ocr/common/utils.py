@@ -13,3 +13,9 @@ def is_base64_encoded(data):
         
     except Exception as e:
         return False
+    
+def decode_file(self,data):
+    try:
+        return   base64.b64decode(data)
+    except Exception as e:
+         raise Exception('Content is not encoded')

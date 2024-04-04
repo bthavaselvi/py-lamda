@@ -4,6 +4,7 @@ from common.OCRServiceFactory import OCRServiceFactory
 import json
 import logging
 import traceback
+from common.utils import utils
 
 app = Flask(__name__)
 logger = logging.getLogger()
@@ -12,15 +13,28 @@ logger.setLevel('INFO')
 @app.route('/analyze', methods=['POST'])
 def analyze_document():
     try:
-        # Get the file from the request
-        file = request.files['file']
-        document_type = request.form.get('documentType')
-        raw = request.form.get('raw')
-        file_content = file.read()
-        service_to_call = OCRServiceFactory().create_OCR_service(document_type)
-        data = service_to_call.analyze_document(data=file_content,raw=raw)
-        if raw:
-            json.dumps(data.__dict__),200,{'content-type':'application/json'}
+        data = None
+        if request.headers['Content-Type'] == 'application/json':
+             
+             json_data = request.json
+             if json_data is not None:
+                base64_encoded_file = json_data.get('fileContent')
+                document_type = json_data.get('documentType')
+
+                if json_data is not None and base64_encoded_file is not None:
+                    service_to_call = OCRServiceFactory().create_OCR_service(document_type)
+                    data = service_to_call.analyze_document(utils.decode_file(base64_encoded_file))
+        elif  request.headers['Content-Type'] == 'multipart/form-data':
+            # Get the file from the request
+            file = request.files['file']
+            document_type = request.form.get('documentType')
+            raw = request.form.get('raw')
+            file_content = file.read()
+            service_to_call = OCRServiceFactory().create_OCR_service(document_type)
+            data = service_to_call.analyze_document(data=file_content,raw=raw)
+        else:
+             return jsonify({"error": "Unsupported Media Type"}), 415
+        
         return json.dumps(data, default=lambda o: o.__dict__),200,{'content-type':'application/json'}
     except Exception as e:
         logging.error(e)
