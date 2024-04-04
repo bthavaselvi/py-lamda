@@ -14,9 +14,9 @@ logger.setLevel('INFO')
 def analyze_document():
     try:
         data = None
-        print('Conyrny type:')
+      
         print( request.headers['Content-Type'])
-        if request.headers['Content-Type'] == 'application/json':
+        if 'application/json' in request.headers['Content-Type'] :
              
              json_data = request.json
              if json_data is not None:
@@ -26,7 +26,7 @@ def analyze_document():
                 if json_data is not None and base64_encoded_file is not None:
                     service_to_call = OCRServiceFactory().create_OCR_service(document_type)
                     data = service_to_call.analyze_document(utils.decode_file(base64_encoded_file))
-        elif  request.headers['Content-Type'] == 'multipart/form-data':
+        elif  'multipart/form-data' in request.headers['Content-Type'] :
             # Get the file from the request
             file = request.files['file']
             document_type = request.form.get('documentType')
