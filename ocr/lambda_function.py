@@ -14,7 +14,7 @@ logger.setLevel('INFO')
 def analyze_document():
     try:
         data = None
-      
+        raw = request.form.get('raw')
         print( request.headers['Content-Type'])
         if 'application/json' in request.headers['Content-Type'] :
              
@@ -25,12 +25,12 @@ def analyze_document():
 
                 if json_data is not None and base64_encoded_file is not None:
                     service_to_call = OCRServiceFactory().create_OCR_service(document_type)
-                    data = service_to_call.analyze_document(utils.decode_file(base64_encoded_file))
+                    data = service_to_call.analyze_document(utils.decode_file(data=base64_encoded_file,raw=raw))
         elif  'multipart/form-data' in request.headers['Content-Type'] :
             # Get the file from the request
             file = request.files['file']
             document_type = request.form.get('documentType')
-            raw = request.form.get('raw')
+           
             file_content = file.read()
             service_to_call = OCRServiceFactory().create_OCR_service(document_type)
             data = service_to_call.analyze_document(data=file_content,raw=raw)
