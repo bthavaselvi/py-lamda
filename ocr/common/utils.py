@@ -15,8 +15,9 @@ class utils:
             
         except Exception as e:
             return False
-        
-    def decode_file(self,data):
+
+    @staticmethod    
+    def decode_file(data):
         try:
             return   base64.b64decode(data)
         except Exception as e:
