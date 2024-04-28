@@ -228,6 +228,14 @@ class IDService(OCR):
             logging.error(e)
             raise
 
-         
+class GeneralDocumentService(OCR):
+    def analyze_document(self, data: bytes,raw:bool):
+        try:
+             document = textract_client.analyze_document(Document={'Bytes': data}) 
+             return document
+        except Exception as e:
+            traceback.print_exc()
+            logging.error(e)
+            raise
 
         
