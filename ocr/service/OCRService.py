@@ -242,7 +242,7 @@ class GeneralDocumentService(OCR):
              job_id = response['JobId']
              print("Started analysis with JobId:", job_id)
              response_document = {}
-             blocks = {}
+             blocks = []
              while True:
                 job_response = textract_client.get_document_analysis(JobId=job_id)
                 job_status = job_response['JobStatus']
@@ -253,7 +253,7 @@ class GeneralDocumentService(OCR):
                     response_document['DocumentMetadata'] =  job_response['DocumentMetadata']
                     if 'Blocks' in response:
                         for block in response['Blocks']:
-                            blocks[block['Id']] = block
+                            blocks.append(block)
 
                     
                     nextToken = None
@@ -264,7 +264,7 @@ class GeneralDocumentService(OCR):
                         job_response = textract_client.get_document_analysis(JobId=job_id, NextToken=nextToken)
                         if 'Blocks' in response:
                             for block in response['Blocks']:
-                                blocks[block['Id']] = block
+                                blocks.append(block)
                       
                         nextToken = None
                         if('NextToken' in job_response):
