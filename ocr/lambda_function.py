@@ -29,11 +29,12 @@ def analyze_document():
         elif  'multipart/form-data' in request.headers['Content-Type'] :
             # Get the file from the request
             file = request.files['file']
+            file_name  = file.filename
             document_type = request.form.get('documentType')
            
             file_content = file.read()
             service_to_call = OCRServiceFactory().create_OCR_service(document_type)
-            data = service_to_call.analyze_document(data=file_content,raw=raw)
+            data = service_to_call.analyze_document(data=file_content,raw=raw,file_name=file_name)
         else:
              return jsonify({"error": "Unsupported Media Type"}), 415
         

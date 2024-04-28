@@ -18,16 +18,18 @@ log = logging.getLogger('my-logger')
 
 region_name = 'us-east-2'
 textract_client =boto3.client('textract', region_name=region_name)
-
+s3_client = boto3.client('s3',region_name=region_name)
+bucket_name  = 'eazeitocrdocuments'
+path = 'ocr'
 
 class OCR:
     @abstractmethod
-    def analyze_document(self,data: bytes,raw:bool):
+    def analyze_document(self,data: bytes,raw:bool,file_name: str):
         pass
 
 class BusinessCardService(OCR):
 
-    def analyze_document(self, data: bytes,raw:bool):
+    def analyze_document(self, data: bytes,raw:bool,file_name:str):
         try:
             response = textract_client.analyze_document(Document={'Bytes': data},
                             FeatureTypes=["QUERIES"],
@@ -198,7 +200,7 @@ class InvoiceService(OCR):
        
            
 
-    def analyze_document(self, data: bytes,raw:bool):
+    def analyze_document(self, data: bytes,raw:bool,file_name:str):
         
             response =  textract_client.analyze_expense(Document={'Bytes': data})   
           
@@ -211,7 +213,7 @@ class InvoiceService(OCR):
       
 class IDService(OCR):
     
-    def analyze_document(self, data: bytes,raw:bool):
+    def analyze_document(self, data: bytes,raw:bool,file_name:str):
        try:
            
             document = textract_client.analyze_id(DocumentPages=[{'Bytes': data}]) 
@@ -230,9 +232,15 @@ class IDService(OCR):
             raise
 
 class GeneralDocumentService(OCR):
-    def analyze_document(self, data: bytes,raw:bool):
+    def analyze_document(self, data: bytes,raw:bool,file_name:str):
         try:
-             response = textract_client.start_document_analysis(Document={'Bytes': data},
+             s3_client.upload_fileobj(data,bucket_name,file_name)
+             response = textract_client.start_document_analysis( DocumentLocation={
+                                'S3Object': {
+                                    'Bucket': bucket_name,
+                                    'Name': file_name
+                                }
+                            },
                             FeatureTypes=['FORMS']) 
              job_id = response['JobId']
              print("Started analysis with JobId:", job_id)
@@ -255,7 +263,7 @@ class GeneralDocumentService(OCR):
                 else:
                     print("Analysis still in progress. Current status:", job_status)
                     time.sleep(1)  # Wait for 10 seconds before checking the status again
-
+             s3_client.delete_object(bucket_name,file_name)
         except Exception as e:
             traceback.print_exc()
             logging.error(e)
