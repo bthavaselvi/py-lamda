@@ -12,7 +12,7 @@ from response.Address import Address
 from response.IDResponse import IDDocument
 from textractor.entities.expense_field import ExpenseField
 import time
-
+from collections import ChainMap
 
 log = logging.getLogger('my-logger')
 bucket_name  = 'eazeitocrdocuments'
@@ -249,7 +249,7 @@ class GeneralDocumentService(OCR):
                 if job_status == 'SUCCEEDED':
                     print("Analysis completed successfully!")
                     # Get the response JSON
-                    pages.append(response_parser.parse_document_api_response(job_response))
+                    pages.append(job_response)
                     
                     nextToken = None
                     if('NextToken' in job_response):
@@ -257,12 +257,13 @@ class GeneralDocumentService(OCR):
 
                     while(nextToken):
                         job_response = textract_client.get_document_analysis(JobId=job_id, NextToken=nextToken)
-                        pages.append(response_parser.parse_document_api_response(job_response))
+                        pages.append(job_response)
                         print("Resultset page recieved: {}".format(len(pages)))
                         nextToken = None
                         if('NextToken' in job_response):
                             nextToken = job_response['NextToken']
-                    return response_parser.parse(pages)
+                    
+                    return response_parser.parse(dict(ChainMap(*pages)))
                 elif job_status == 'FAILED':
                     print("Analysis failed!")
                     # Additional error handling code, if needed
