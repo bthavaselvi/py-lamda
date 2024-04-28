@@ -231,7 +231,8 @@ class IDService(OCR):
 class GeneralDocumentService(OCR):
     def analyze_document(self, data: bytes,raw:bool):
         try:
-             document = textract_client.analyze_document(Document={'Bytes': data}) 
+             document = textract_client.analyze_document(Document={'Bytes': data},
+                            FeatureTypes=['FORMS']) 
              return document
         except Exception as e:
             traceback.print_exc()
