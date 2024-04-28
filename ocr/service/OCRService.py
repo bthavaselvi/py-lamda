@@ -256,7 +256,7 @@ class GeneralDocumentService(OCR):
                         nextToken = job_response['NextToken']
 
                     while(nextToken):
-                        job_response = textract_client.get_document_text_detection(JobId=job_id, NextToken=nextToken)
+                        job_response = textract_client.get_document_analysis(JobId=job_id, NextToken=nextToken)
                         pages.append(job_response)
                         print("Resultset page recieved: {}".format(len(pages)))
                         nextToken = None

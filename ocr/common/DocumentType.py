@@ -4,4 +4,4 @@ class DocumentType(Enum):
     INVOICE = 'Invoice'
     ID = 'ID'
     RECEIPT = 'Receipt'
-    GENERAL = 'Genaral'
+    GENERAL = 'General'
