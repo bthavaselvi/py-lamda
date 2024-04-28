@@ -241,7 +241,8 @@ class GeneralDocumentService(OCR):
                             FeatureTypes=['FORMS']) 
              job_id = response['JobId']
              print("Started analysis with JobId:", job_id)
-             pages = []
+             response_document = {}
+             blocks = {}
              while True:
                 job_response = textract_client.get_document_analysis(JobId=job_id)
                 job_status = job_response['JobStatus']
@@ -249,8 +250,11 @@ class GeneralDocumentService(OCR):
                 if job_status == 'SUCCEEDED':
                     print("Analysis completed successfully!")
                     # Get the response JSON
-                    pages.append(job_response)
-                    print(job_response)
+                    response_document['DocumentMetadata'] =  job_response['DocumentMetadata']
+                    if 'Blocks' in response:
+                        for block in response['Blocks']:
+                            blocks[block['Id']] = block
+
                     
                     nextToken = None
                     if('NextToken' in job_response):
@@ -258,14 +262,15 @@ class GeneralDocumentService(OCR):
 
                     while(nextToken):
                         job_response = textract_client.get_document_analysis(JobId=job_id, NextToken=nextToken)
-                        pages.append(job_response)
-                        print("Resultset page recieved: {}".format(len(pages)))
-                        print(job_response)
+                        if 'Blocks' in response:
+                            for block in response['Blocks']:
+                                blocks[block['Id']] = block
+                      
                         nextToken = None
                         if('NextToken' in job_response):
                             nextToken = job_response['NextToken']
-                    
-                    return pages
+                    response_document['Blocks'] = blocks
+                    return response_parser.parse(response_document)
                 elif job_status == 'FAILED':
                     print("Analysis failed!")
                     # Additional error handling code, if needed
