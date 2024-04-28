@@ -232,20 +232,19 @@ class IDService(OCR):
 class GeneralDocumentService(OCR):
     def analyze_document(self, data: bytes,raw:bool):
         try:
-             document = textract_client.start_document_analysis(Document={'Bytes': data},
+             response = textract_client.start_document_analysis(Document={'Bytes': data},
                             FeatureTypes=['FORMS']) 
              job_id = response['JobId']
              print("Started analysis with JobId:", job_id)
 
-             job_response = None
              while True:
-                job_response = textract.get_document_analysis(JobId=job_id)
+                job_response = textract_client.get_document_analysis(JobId=job_id)
                 job_status = job_response['JobStatus']
                 
                 if job_status == 'SUCCEEDED':
                     print("Analysis completed successfully!")
                     # Get the response JSON
-                    response_json = job_response['Blocks']
+                
                     return response_parser.parse(job_response)
                     # Additional code to process the response JSON, if needed
                     break
