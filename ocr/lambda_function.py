@@ -22,6 +22,7 @@ path = 'ocr'
 def analyze_document():
     try:
         data = None
+        file_content = None
         raw = request.form.get('raw')
         print( request.headers['Content-Type'])
         if 'application/json' in request.headers['Content-Type'] :
@@ -41,7 +42,8 @@ def analyze_document():
             document_type = request.form.get('documentType')
             if document_type == DocumentType.GENERAL.value:
                 s3_client.upload_fileobj(file,bucket_name,file_name)
-            file_content = file.read()
+            else:
+                file_content = file.read()
             service_to_call = OCRServiceFactory().create_OCR_service(document_type)
             data = service_to_call.analyze_document(data=file_content,raw=raw,file_name=file_name)
         else:
