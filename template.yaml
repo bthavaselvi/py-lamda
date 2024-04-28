@@ -73,7 +73,7 @@ Resources:
        - CloudWatchLogsFullAccess
       Handler: lambda_function.lambda_handler
       Runtime: python3.12
-      Timeout: 10
+      Timeout: 30
       PackageType: Zip
       Role: !GetAtt LambdaExecutionRole.Arn
      
