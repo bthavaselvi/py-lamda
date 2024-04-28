@@ -250,7 +250,7 @@ class GeneralDocumentService(OCR):
                     print("Analysis completed successfully!")
                     # Get the response JSON
                 
-                    return response_parser.parse(job_response)
+                    return job_response
                   
                 elif job_status == 'FAILED':
                     print("Analysis failed!")
