@@ -238,7 +238,7 @@ class GeneralDocumentService(OCR):
                                     'Name': file_name
                                 }
                             },
-                            FeatureTypes=['FORMS']) 
+                            FeatureTypes=['TABLES']) 
              job_id = response['JobId']
              print("Started analysis with JobId:", job_id)
              response_document = {}
