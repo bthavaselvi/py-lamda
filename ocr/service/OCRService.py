@@ -250,18 +250,18 @@ class GeneralDocumentService(OCR):
                     print("Analysis completed successfully!")
                     # Get the response JSON
                     pages.append(job_response)
-                    job_response
+                    
                     nextToken = None
-                    if('NextToken' in response):
-                        nextToken = response['NextToken']
+                    if('NextToken' in job_response):
+                        nextToken = job_response['NextToken']
 
                     while(nextToken):
-                        response = textract_client.get_document_text_detection(JobId=job_id, NextToken=nextToken)
-                        pages.append(response)
+                        job_response = textract_client.get_document_text_detection(JobId=job_id, NextToken=nextToken)
+                        pages.append(job_response)
                         print("Resultset page recieved: {}".format(len(pages)))
                         nextToken = None
-                        if('NextToken' in response):
-                            nextToken = response['NextToken']
+                        if('NextToken' in job_response):
+                            nextToken = job_response['NextToken']
                     return response_parser.parse(pages)
                 elif job_status == 'FAILED':
                     print("Analysis failed!")
