@@ -249,7 +249,7 @@ class GeneralDocumentService(OCR):
                 if job_status == 'SUCCEEDED':
                     print("Analysis completed successfully!")
                     # Get the response JSON
-                    pages.append(job_response)
+                    pages.append(response_parser.parse_document_api_response(job_response))
                     
                     nextToken = None
                     if('NextToken' in job_response):
@@ -257,7 +257,7 @@ class GeneralDocumentService(OCR):
 
                     while(nextToken):
                         job_response = textract_client.get_document_analysis(JobId=job_id, NextToken=nextToken)
-                        pages.append(job_response)
+                        pages.append(response_parser.parse_document_api_response(job_response))
                         print("Resultset page recieved: {}".format(len(pages)))
                         nextToken = None
                         if('NextToken' in job_response):
