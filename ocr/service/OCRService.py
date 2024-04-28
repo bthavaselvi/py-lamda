@@ -254,8 +254,7 @@ class GeneralDocumentService(OCR):
                     # Get the response JSON
                 
                     return response_parser.parse(job_response)
-                    # Additional code to process the response JSON, if needed
-                    break
+                  
                 elif job_status == 'FAILED':
                     print("Analysis failed!")
                     # Additional error handling code, if needed
