@@ -241,7 +241,7 @@ class GeneralDocumentService(OCR):
                             FeatureTypes=['FORMS']) 
              job_id = response['JobId']
              print("Started analysis with JobId:", job_id)
-
+             pages = []
              while True:
                 job_response = textract_client.get_document_analysis(JobId=job_id)
                 job_status = job_response['JobStatus']
@@ -249,9 +249,20 @@ class GeneralDocumentService(OCR):
                 if job_status == 'SUCCEEDED':
                     print("Analysis completed successfully!")
                     # Get the response JSON
-                
-                    return job_response
-                  
+                    pages.append(job_response)
+                    job_response
+                    nextToken = None
+                    if('NextToken' in response):
+                        nextToken = response['NextToken']
+
+                    while(nextToken):
+                        response = textract_client.get_document_text_detection(JobId=job_id, NextToken=nextToken)
+                        pages.append(response)
+                        print("Resultset page recieved: {}".format(len(pages)))
+                        nextToken = None
+                        if('NextToken' in response):
+                            nextToken = response['NextToken']
+                    return response_parser.parse(pages)
                 elif job_status == 'FAILED':
                     print("Analysis failed!")
                     # Additional error handling code, if needed
