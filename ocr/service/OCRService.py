@@ -15,12 +15,9 @@ import time
 
 
 log = logging.getLogger('my-logger')
-
+bucket_name  = 'eazeitocrdocuments'
 region_name = 'us-east-2'
 textract_client =boto3.client('textract', region_name=region_name)
-s3_client = boto3.client('s3',region_name=region_name)
-bucket_name  = 'eazeitocrdocuments'
-path = 'ocr'
 
 class OCR:
     @abstractmethod
@@ -234,7 +231,7 @@ class IDService(OCR):
 class GeneralDocumentService(OCR):
     def analyze_document(self, data: bytes,raw:bool,file_name:str):
         try:
-             s3_client.upload_fileobj(data,bucket_name,file_name)
+            
              response = textract_client.start_document_analysis( DocumentLocation={
                                 'S3Object': {
                                     'Bucket': bucket_name,
@@ -262,7 +259,7 @@ class GeneralDocumentService(OCR):
                 else:
                     print("Analysis still in progress. Current status:", job_status)
                     time.sleep(1)  # Wait for 10 seconds before checking the status again
-             s3_client.delete_object(bucket_name,file_name)
+             
         except Exception as e:
             traceback.print_exc()
             logging.error(e)

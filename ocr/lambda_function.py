@@ -5,10 +5,18 @@ import json
 import logging
 import traceback
 from common.utils import utils
+import boto3
+from common.DocumentType import DocumentType
 
 app = Flask(__name__)
 logger = logging.getLogger()
 logger.setLevel('INFO')
+
+region_name = 'us-east-2'
+
+s3_client = boto3.client('s3',region_name=region_name)
+bucket_name  = 'eazeitocrdocuments'
+path = 'ocr'
 
 @app.route('/analyze', methods=['POST'])
 def analyze_document():
@@ -31,7 +39,8 @@ def analyze_document():
             file = request.files['file']
             file_name  = file.filename
             document_type = request.form.get('documentType')
-           
+            if document_type == DocumentType.GENERAL.value:
+                s3_client.upload_fileobj(file,bucket_name,file_name)
             file_content = file.read()
             service_to_call = OCRServiceFactory().create_OCR_service(document_type)
             data = service_to_call.analyze_document(data=file_content,raw=raw,file_name=file_name)
