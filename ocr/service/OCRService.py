@@ -263,7 +263,7 @@ class GeneralDocumentService(OCR):
                         if('NextToken' in job_response):
                             nextToken = job_response['NextToken']
                     
-                    return response_parser.parse(dict(ChainMap(*pages)))
+                    return response_parser.parse({k: v for dct in pages for k, v in dct.items()})
                 elif job_status == 'FAILED':
                     print("Analysis failed!")
                     # Additional error handling code, if needed
