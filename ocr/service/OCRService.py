@@ -270,7 +270,7 @@ class GeneralDocumentService(OCR):
                         if('NextToken' in job_response):
                             nextToken = job_response['NextToken']
                     response_document['Blocks'] = blocks
-                    return response_parser.parse(response_document)
+                    return response_parser.parse(response_document).tables()
                 elif job_status == 'FAILED':
                     print("Analysis failed!")
                     # Additional error handling code, if needed
