@@ -251,8 +251,8 @@ class GeneralDocumentService(OCR):
                     print("Analysis completed successfully!")
                     # Get the response JSON
                     response_document['DocumentMetadata'] =  job_response['DocumentMetadata']
-                    if 'Blocks' in response:
-                        for block in response['Blocks']:
+                    if 'Blocks' in job_response:
+                        for block in job_response['Blocks']:
                             blocks.append(block)
 
                     
@@ -262,8 +262,8 @@ class GeneralDocumentService(OCR):
 
                     while(nextToken):
                         job_response = textract_client.get_document_analysis(JobId=job_id, NextToken=nextToken)
-                        if 'Blocks' in response:
-                            for block in response['Blocks']:
+                        if 'Blocks' in job_response:
+                            for block in job_response['Blocks']:
                                 blocks.append(block)
                       
                         nextToken = None
@@ -277,7 +277,7 @@ class GeneralDocumentService(OCR):
                     break
                 else:
                     print("Analysis still in progress. Current status:", job_status)
-                    time.sleep(1)  # Wait for 10 seconds before checking the status again
+                    time.sleep(5)  # Wait for 10 seconds before checking the status again
              
         except Exception as e:
             traceback.print_exc()
