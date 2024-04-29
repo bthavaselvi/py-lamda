@@ -231,7 +231,7 @@ class IDService(OCR):
 class GeneralDocumentService(OCR):
     def analyze_document(self, data: bytes,raw:bool,file_name:str):
         try:
-            
+             valid_blocks = ['TABLE', 'CELL']
              response = textract_client.start_document_analysis( DocumentLocation={
                                 'S3Object': {
                                     'Bucket': bucket_name,
@@ -253,7 +253,8 @@ class GeneralDocumentService(OCR):
                     response_document['DocumentMetadata'] =  job_response['DocumentMetadata']
                     if 'Blocks' in job_response:
                         for block in job_response['Blocks']:
-                            blocks.append(block)
+                            if block['BlockType'] in valid_blocks:
+                                blocks.append(block)
 
                     
                     nextToken = None
@@ -264,7 +265,8 @@ class GeneralDocumentService(OCR):
                         job_response = textract_client.get_document_analysis(JobId=job_id, NextToken=nextToken)
                         if 'Blocks' in job_response:
                             for block in job_response['Blocks']:
-                                blocks.append(block)
+                                if block['BlockType'] in valid_blocks:
+                                 blocks.append(block)
                       
                         nextToken = None
                         if('NextToken' in job_response):
