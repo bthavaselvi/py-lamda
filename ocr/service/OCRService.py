@@ -253,7 +253,7 @@ class GeneralDocumentService(OCR):
                     response_document['DocumentMetadata'] =  job_response['DocumentMetadata']
                     if 'Blocks' in job_response:
                         for block in job_response['Blocks']:
-                            if block['BlockType'] in valid_blocks:
+                            # if block['BlockType'] in valid_blocks:
                                 blocks.append(block)
 
                     
@@ -265,8 +265,8 @@ class GeneralDocumentService(OCR):
                         job_response = textract_client.get_document_analysis(JobId=job_id, NextToken=nextToken)
                         if 'Blocks' in job_response:
                             for block in job_response['Blocks']:
-                                if block['BlockType'] in valid_blocks:
-                                 blocks.append(block)
+                                # if block['BlockType'] in valid_blocks:
+                                  blocks.append(block)
                       
                         nextToken = None
                         if('NextToken' in job_response):
