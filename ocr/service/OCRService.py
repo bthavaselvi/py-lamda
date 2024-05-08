@@ -98,8 +98,8 @@ class InvoiceService(OCR):
                 price = expense.value.text
             elif expense.type.text == 'PRODUCT_CODE':
                 product_code = expense.value.text
-        item_to_analyze  = expense_row + ' ' +  item + ' '+ quantity
-        catagory =  aianalysis.detect_expense_categories(item)
+        item_to_analyze  = expense_row + ' ' +  item + ' '+ quantity if expense_row is not None and quantity is not None else item
+        catagory =  aianalysis.detect_expense_categories(item_to_analyze)
         return LineItem(expenseRowNumber=expense_row,item=item,quantity=quantity,
                         unitPrice= unit_price,price=price,productCode=product_code,catagory=catagory)
 
