@@ -5,6 +5,8 @@ class AIAnalysis:
     def detect_expense_categories(self,text):
     
         # Call the DetectEntities API to extract entities (like expenses) from the text
+        print('text')
+        print(text)
         response_entities = comprehend.detect_entities(Text=text, LanguageCode='en')
         entities = response_entities['Entities']
         print(entities)
