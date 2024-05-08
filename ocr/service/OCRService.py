@@ -13,11 +13,13 @@ from response.IDResponse import IDDocument
 from textractor.entities.expense_field import ExpenseField
 import time
 from collections import ChainMap
+from AIAnalysis import AIAnalysis
 
 log = logging.getLogger('my-logger')
 bucket_name  = 'eazeitocrdocuments'
 region_name = 'us-east-2'
 textract_client =boto3.client('textract', region_name=region_name)
+aianalysis = AIAnalysis()
 
 class OCR:
     @abstractmethod
@@ -96,9 +98,9 @@ class InvoiceService(OCR):
                 price = expense.value.text
             elif expense.type.text == 'PRODUCT_CODE':
                 product_code = expense.value.text
-        
+        catagory =  aianalysis.detect_expense_categories(item)
         return LineItem(expenseRowNumber=expense_row,item=item,quantity=quantity,
-                        unitPrice= unit_price,price=price,productCode=product_code)
+                        unitPrice= unit_price,price=price,productCode=product_code,catagory=catagory)
 
     def toSummaryFields(self,summary_fields) -> SummaryFields:
        

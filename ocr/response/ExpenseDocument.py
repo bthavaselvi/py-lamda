@@ -14,13 +14,14 @@ class Vendor:
 
 class LineItem:
     def __init__(self,expenseRowNumber:int,item:str,quantity: Decimal,unitPrice:Decimal,price: Decimal,
-                 productCode:str):
+                 productCode:str,catagory:str):
         self.expenseRowNumber = expenseRowNumber
         self.item = item
         self.quantity = quantity
         self.unitPrice = unitPrice
         self.price = price
         self.productCode = productCode
+        self.catagory = catagory
 
 class SummaryFields:
     def __init__(self,invoiceReceiptDate:str,invoiceReceiptId:str,poNumber:str,
