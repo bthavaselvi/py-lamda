@@ -13,7 +13,7 @@ from response.IDResponse import IDDocument
 from textractor.entities.expense_field import ExpenseField
 import time
 from collections import ChainMap
-from AIAnalysis import AIAnalysis
+from service.AIAnalysis import AIAnalysis
 
 log = logging.getLogger('my-logger')
 bucket_name  = 'eazeitocrdocuments'
