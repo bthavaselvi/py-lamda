@@ -14,12 +14,14 @@ from textractor.entities.expense_field import ExpenseField
 import time
 from collections import ChainMap
 from service.AIAnalysis import AIAnalysis
+from service.AISerivce import AIService
 
 log = logging.getLogger('my-logger')
 bucket_name  = 'eazeitocrdocuments'
 region_name = 'us-east-2'
 textract_client =boto3.client('textract', region_name=region_name)
 aianalysis = AIAnalysis()
+aiService = AIService()
 
 class OCR:
     @abstractmethod
@@ -99,7 +101,7 @@ class InvoiceService(OCR):
             elif expense.type.text == 'PRODUCT_CODE':
                 product_code = expense.value.text
         item_to_analyze  = expense_row + ' ' +  item + ' '+ quantity if expense_row is not None and quantity is not None else item
-        catagory =  aianalysis.detect_expense_categories(item_to_analyze)
+        catagory =  aiService.catagorize_expense(item_to_analyze)
         return LineItem(expenseRowNumber=expense_row,item=item,quantity=quantity,
                         unitPrice= unit_price,price=price,productCode=product_code,catagory=catagory)
 
