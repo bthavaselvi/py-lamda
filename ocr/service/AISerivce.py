@@ -3,6 +3,11 @@ import openai
 class AIService:
     api_key='sk-ocr-service-0IGxmDs1Ot1mtuVTszOAT3BlbkFJindjCeNJOzLtQOc16fDE'
    
+   # lets initialize the API client 1st
+    client = openai.OpenAI(
+        # This is the default and can be omitted
+        api_key=api_key
+    )
     def catagorize_expense(self,description):
 
          expense_categories = {
@@ -17,11 +22,21 @@ class AIService:
             "Taxes": ["Income taxes","Sales taxes","Property taxes"]
         # Define keywords for other categories similarly
         }
-         response =openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=f"I need to categorize the expense: '{description}'. The categories are: {list(expense_categories.keys())}. Please assign it to the appropriate category.",
-            max_tokens=50
-            )
+         response = client.chat.completions.create(
+                        model="gpt-3.5-turbo",  
+                        messages=[
+                            {
+                                "role": "user",
+                                "content":  f"I need to categorize the expense: '{description}'. The categories are: {list(expense_categories.keys())}. Please assign it to the appropriate category.",
+                            }
+                        ],
+                        max_tokens=60
+                )
+        #  Completion.create(
+        #     engine="text-davinci-003",
+        #     prompt=f"I need to categorize the expense: '{description}'. The categories are: {list(expense_categories.keys())}. Please assign it to the appropriate category.",
+        #     max_tokens=50
+        #     )
          for category, keywords in expense_categories.items():
                     for keyword in keywords:
                         if keyword in response.choices[0].text.strip().lower():
