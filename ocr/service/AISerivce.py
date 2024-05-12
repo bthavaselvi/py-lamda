@@ -22,7 +22,7 @@ class AIService:
             "Taxes": ["Income taxes","Sales taxes","Property taxes"]
         # Define keywords for other categories similarly
         }
-         response = client.chat.completions.create(
+         response = self.client.chat.completions.create(
                         model="gpt-3.5-turbo",  
                         messages=[
                             {
