@@ -41,7 +41,7 @@ class AIService:
          print(response.choices[0].message.content)
          for category, keywords in expense_categories.items():
                     for keyword in keywords:
-                        if keyword in response.choices[0].message.content.strip().lower():
+                        if keyword.lower() in response.choices[0].message.content.strip().lower():
                             return category
          return "Miscellaneous"  # If no matching category found
 
