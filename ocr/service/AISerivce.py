@@ -22,7 +22,7 @@ class AIService:
             "Taxes": ["Income taxes","Sales taxes","Property taxes"]
         # Define keywords for other categories similarly
         }
-         response = self.client.chat.completions.create(
+         response = self.client.ChatCompletion.create(
                         model="gpt-3.5-turbo",  
                         messages=[
                             {
@@ -39,7 +39,7 @@ class AIService:
         #     )
          for category, keywords in expense_categories.items():
                     for keyword in keywords:
-                        if keyword in response.message.content.strip().lower():
+                        if keyword in response.choice[0].message.content.strip().lower():
                             return category
          return "Miscellaneous"  # If no matching category found
 
