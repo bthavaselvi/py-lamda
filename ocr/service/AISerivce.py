@@ -37,11 +37,12 @@ class AIService:
         #     prompt=f"I need to categorize the expense: '{description}'. The categories are: {list(expense_categories.keys())}. Please assign it to the appropriate category.",
         #     max_tokens=50
         #     )
-         print(response)
+        
          print(response.choices[0].message.content)
          for category, keywords in expense_categories.items():
+                    
                     for keyword in keywords:
-                        if keyword.lower() in response.choices[0].message.content.strip().lower():
+                        if keyword.lower() == response.choices[0].message.content.strip().lower():
                             return category
          return "Miscellaneous"  # If no matching category found
 
