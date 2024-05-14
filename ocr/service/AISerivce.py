@@ -43,7 +43,7 @@ class AIService:
                     
                     # for keyword in keywords:
                     #     print(f"keyword:{keyword},{response.choices[0].message.content}")
-                        if category in response.choices[0].message.content.strip().lower():
+                        if category.lower() in response.choices[0].message.content.strip().lower():
                             return category
          return "Miscellaneous"  # If no matching category found
 
