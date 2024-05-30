@@ -14,7 +14,7 @@ class AIService:
             "Operational Expenses": ["rent", "utilities", "office supplies"],
             "Employee Expenses": ["payroll", "benefits", "travel"],
             "food": ["restaurant", "grocery", "takeout", "coffee"],
-            "transportation": ["taxi", "uber", "gas", "public transportation"],
+            "transportation": ["taxi", "uber","lyft", "gas", "public transportation"],
             "utilities": ["electricity", "water", "internet", "phone"],
             "Administrative Expenses" : ["Office rent","Office lease","Insurance premiums"],
             "Technology Expenses": ["Software subscriptions","Hardware purchases","IT services and support"],
@@ -32,12 +32,7 @@ class AIService:
                         ],
                         max_tokens=60
                 )
-        #  Completion.create(
-        #     engine="text-davinci-003",
-        #     prompt=f"I need to categorize the expense: '{description}'. The categories are: {list(expense_categories.keys())}. Please assign it to the appropriate category.",
-        #     max_tokens=50
-        #     )
-        
+       
       
          for category, keywords in expense_categories.items():
                     
