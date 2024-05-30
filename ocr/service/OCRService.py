@@ -19,6 +19,7 @@ from textractcaller.t_call import call_textract, Textract_Features
 from trp.trp2 import TDocument, TDocumentSchema
 from trp.t_pipeline import order_blocks_by_geo
 import trp
+from trp import Document
 
 log = logging.getLogger('my-logger')
 bucket_name  = 'eazeitocrdocuments'
@@ -281,7 +282,7 @@ class GeneralDocumentService(OCR):
                         if('NextToken' in job_response):
                             nextToken = job_response['NextToken']
                     response_document['Blocks'] = blocks
-                    t_doc = TDocumentSchema().load(response_document)
+                    t_doc = Document(response_document)
                    
                     return t_doc
                 elif job_status == 'FAILED':
