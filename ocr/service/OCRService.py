@@ -282,11 +282,8 @@ class GeneralDocumentService(OCR):
                             nextToken = job_response['NextToken']
                     response_document['Blocks'] = blocks
                     t_doc = TDocumentSchema().load(response_document)
-                    # the ordered_doc has elements ordered by y-coordinate (top to bottom of page)
-                    ordered_doc = order_blocks_by_geo(t_doc)
-                    # send to trp for further processing logic
-                    trp_doc = trp.Document(TDocumentSchema().dump(ordered_doc))
-                    return trp_doc
+                   
+                    return t_doc
                 elif job_status == 'FAILED':
                     print("Analysis failed!")
                     # Additional error handling code, if needed
