@@ -264,7 +264,7 @@ class GeneralDocumentService(OCR):
                     if 'Blocks' in job_response:
                         for block in job_response['Blocks']:
                             # if block['BlockType'] in valid_blocks:
-                               print(type(block['Geometry']))
+                               
                                if 'Geometry' in block:
                                  del block['Geometry']
 
@@ -279,16 +279,18 @@ class GeneralDocumentService(OCR):
                         job_response = textract_client.get_document_analysis(JobId=job_id, NextToken=nextToken)
                         if 'Blocks' in job_response:
                             for block in job_response['Blocks']:
-                                # if block['BlockType'] in valid_blocks:
-                                  blocks.append(block)
+                                 if 'Geometry' in block:
+                                     del block['Geometry']
+
+                                 blocks.append(block)
                       
                         nextToken = None
                         if('NextToken' in job_response):
                             nextToken = job_response['NextToken']
                     response_document['Blocks'] = blocks
-                    t_doc = Document(response_document)
+                  
                    
-                    return t_doc
+                    return response_document
                 elif job_status == 'FAILED':
                     print("Analysis failed!")
                     # Additional error handling code, if needed
