@@ -274,7 +274,7 @@ class GeneralDocumentService(OCR):
                                        if 'Type' in relationship and relationship['Type'] == 'CHILD':
                                            del relationship['Type'] 
                                            if 'Ids' in relationship:
-                                            del relationship['Type']
+                                            del relationship['Ids']
                                blocks.append(block)
 
                     
@@ -295,7 +295,7 @@ class GeneralDocumentService(OCR):
                                        if 'Type' in relationship and relationship['Type'] == 'CHILD':
                                            del relationship['Type'] 
                                            if 'Ids' in relationship:
-                                            del relationship['Type']
+                                            del relationship['Ids']
 
                                  blocks.append(block)
                       
