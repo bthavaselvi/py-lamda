@@ -264,7 +264,10 @@ class GeneralDocumentService(OCR):
                     if 'Blocks' in job_response:
                         for block in job_response['Blocks']:
                             # if block['BlockType'] in valid_blocks:
-                                blocks.append(block)
+                               if 'Geometry' in block:
+                                 del block['Geometry']
+
+                               blocks.append(block)
 
                     
                     nextToken = None
