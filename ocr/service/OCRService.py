@@ -267,7 +267,14 @@ class GeneralDocumentService(OCR):
                                
                                if 'Geometry' in block:
                                  del block['Geometry']
-
+                               if 'WORD' in block:
+                                   del block['WORD']
+                               if block['BlockType'] == 'LINE':
+                                   for relationship in block['Relationships']:
+                                       if 'Type' in relationship and relationship['Type'] == 'CHILD':
+                                           del relationship['Type'] 
+                                           if 'Ids' in relationship:
+                                            del relationship['Type']
                                blocks.append(block)
 
                     
@@ -281,6 +288,14 @@ class GeneralDocumentService(OCR):
                             for block in job_response['Blocks']:
                                  if 'Geometry' in block:
                                      del block['Geometry']
+                                 if 'WORD' in block:
+                                   del block['WORD']
+                                 if block['BlockType'] == 'LINE':
+                                   for relationship in block['Relationships']:
+                                       if 'Type' in relationship and relationship['Type'] == 'CHILD':
+                                           del relationship['Type'] 
+                                           if 'Ids' in relationship:
+                                            del relationship['Type']
 
                                  blocks.append(block)
                       
