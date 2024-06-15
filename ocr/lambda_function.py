@@ -23,21 +23,23 @@ def analyze_document():
     try:
         data = None
         file_content = None
-        raw = request.form.get('raw')
-        print( request.headers['Content-Type'])
+        
         if 'application/json' in request.headers['Content-Type'] :
              
              json_data = request.json
              if json_data is not None:
                 base64_encoded_file = json_data.get('fileContent')
                 document_type = json_data.get('documentType')
-
+                if base64_encoded_file is None:
+                    return jsonify({"error": "File content cannot be empty"}), 400
                 if json_data is not None and base64_encoded_file is not None:
                     service_to_call = OCRServiceFactory().create_OCR_service(document_type)
-                    data = service_to_call.analyze_document(data=utils.decode_file(base64_encoded_file),raw=raw,file_name=None)
+                    data = service_to_call.analyze_document(data=utils.decode_file(base64_encoded_file),file_name=None)
         elif  'multipart/form-data' in request.headers['Content-Type'] :
             # Get the file from the request
             file = request.files['file']
+            if file is None:
+                return jsonify({"error": "File cannot be empty"}), 400
             file_name  = file.filename
             document_type = request.form.get('documentType')
             if document_type == DocumentType.GENERAL.value:
@@ -45,7 +47,7 @@ def analyze_document():
             else:
                 file_content = file.read()
             service_to_call = OCRServiceFactory().create_OCR_service(document_type)
-            data = service_to_call.analyze_document(data=file_content,raw=raw,file_name=file_name)
+            data = service_to_call.analyze_document(data=file_content,file_name=file_name)
         else:
              return jsonify({"error": "Unsupported Media Type"}), 415
         

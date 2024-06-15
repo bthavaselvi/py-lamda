@@ -30,12 +30,12 @@ aiService = AIService()
 
 class OCR:
     @abstractmethod
-    def analyze_document(self,data: bytes,raw:bool,file_name: str):
+    def analyze_document(self,data: bytes,file_name: str):
         pass
 
 class BusinessCardService(OCR):
 
-    def analyze_document(self, data: bytes,raw:bool,file_name:str):
+    def analyze_document(self, data: bytes,file_name:str):
         try:
             response = textract_client.analyze_document(Document={'Bytes': data},
                             FeatureTypes=["QUERIES"],
@@ -207,20 +207,18 @@ class InvoiceService(OCR):
        
            
 
-    def analyze_document(self, data: bytes,raw:bool,file_name:str):
+    def analyze_document(self, data: bytes,file_name:str):
         
             response =  textract_client.analyze_expense(Document={'Bytes': data})   
           
             expense_document = response_parser.parser_analyze_expense_response(response).expense_documents[0]   
-            if raw:
-             return expense_document
             expense_doc_to_return =  self.toExpenseDocument(expense_document)
             return expense_doc_to_return
             
       
 class IDService(OCR):
     
-    def analyze_document(self, data: bytes,raw:bool,file_name:str):
+    def analyze_document(self, data: bytes,file_name:str):
        try:
            
             document = textract_client.analyze_id(DocumentPages=[{'Bytes': data}]) 
@@ -239,7 +237,7 @@ class IDService(OCR):
             raise
 
 class GeneralDocumentService(OCR):
-    def analyze_document(self, data: bytes,raw:bool,file_name:str):
+    def analyze_document(self, data: bytes,file_name:str):
         try:
              valid_blocks = ['TABLE', 'CELL']
              response = textract_client.start_document_analysis( DocumentLocation={
