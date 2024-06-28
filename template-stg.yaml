@@ -89,15 +89,15 @@ Resources:
   OCRLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${OCRFunction}"
+      LogGroupName: !Sub "/aws/lambda/${OCRFunctionStg}"
       RetentionInDays: 5
   
   ConfigLambdaPermission:
     Type: AWS::Lambda::Permission
-    DependsOn: OCRFunction
+    DependsOn: OCRFunctionStg
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Ref OCRFunction-stg
+      FunctionName: !Ref OCRFunctionStg
       Principal: apigateway.amazonaws.com
         ####### Necessary for API Gateway Logging ########
       # Add the CloudWatchRole and Account resource to your template to give API Gateway permissions write to CloudWatch logs
@@ -134,7 +134,7 @@ Outputs:
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/stg/ocr"
   OCRFunction:
     Description: OCR Lambda Function ARN
-    Value: !GetAtt OCRFunction.Arn
+    Value: !GetAtt OCRFunctionStg.Arn
   OCRFunctionIamRole:
     Description: Implicit IAM Role created for Hello World function
     Value: !GetAtt LambdaExecutionRole.Arn
