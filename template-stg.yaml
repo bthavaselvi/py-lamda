@@ -82,7 +82,7 @@ Resources:
        - x86_64
       Events:
         OCR:
-          Type: StgApi # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: HttpApi # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /{proxy+}
             Method: ANY
@@ -131,7 +131,7 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   OCRApi:
     Description: API Gateway endpoint URL for  stage for Hello World function
-    Value: !Sub "https://${ServerlessStgApi}.execute-api.${AWS::Region}.amazonaws.com/stg/ocr"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/stg/ocr"
   OCRFunction:
     Description: OCR Lambda Function ARN
     Value: !GetAtt OCRFunctionStg.Arn
