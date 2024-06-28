@@ -1,0 +1,38 @@
+name: Deploy OCR service to stage
+
+on:
+  push:
+    branches:
+      - development
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: aws-actions/setup-sam@v2
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          audience: sts.amazonaws.com
+          aws-region: us-east-2
+          role-to-assume: arn:aws:iam::347971429976:role/github_action
+          role-session-name: MySessionName    
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+          cache: 'pip'
+      - name: Install dependencies
+        run: |
+          pip install aws-sam-cli awscli
+          pip install -r .github/workflows/requirements.txt
+       
+      - name: SAM build 
+        run: 
+          sam build --use-container
+
+      - name: Deploy SAM application
+        run: sam deploy --template-file template-stg.yaml --no-confirm-changeset --no-fail-on-empty-changeset
+       
