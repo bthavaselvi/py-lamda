@@ -81,8 +81,8 @@ Resources:
       Architectures:
        - x86_64
       Events:
-        OCR:
-          Type: StgApi # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+        OCRStg:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /{proxy+}
             Method: ANY
@@ -129,12 +129,12 @@ Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  OCRApi:
+  OCRStgApi:
     Description: API Gateway endpoint URL for  stage for Hello World function
-    Value: !Sub "https://${ServerlessStgApi}.execute-api.${AWS::Region}.amazonaws.com/stg/ocr"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/stg/ocr"
   OCRFunction:
     Description: OCR Lambda Function ARN
     Value: !GetAtt OCRFunctionStg.Arn
   OCRFunctionIamRole:
-    Description: Implicit IAM Role created for Hello World function
+    Description: Implicit IAM Role created for Hello World function -0b
     Value: !GetAtt LambdaExecutionRole.Arn
