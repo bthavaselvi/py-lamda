@@ -131,7 +131,7 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   OCRStgApi:
     Description: API Gateway endpoint URL for  stage for Hello World function
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/stg/ocr"
+    Value: !Sub "https://${ServerlessRestApiOCRStg}.execute-api.${AWS::Region}.amazonaws.com/stg/ocr"
   OCRFunction:
     Description: OCR Lambda Function ARN
     Value: !GetAtt OCRFunctionStg.Arn
