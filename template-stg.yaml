@@ -101,6 +101,8 @@ Resources:
       Type: 'AWS::Serverless::Api'
       Properties:
         StageName: !Ref Stage
+        Path: /{proxy+}
+        Method: ANY
         Auth:
           DefaultAuthorizer: CognitoAuthorizer
           Authorizers:
@@ -130,9 +132,9 @@ Resources:
         OCRStg:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           RestApiId: !Ref StgApiGateway
-          Properties:
-            Path: /{proxy+}
-            Method: ANY
+          # Properties:
+          #   Path: /{proxy+}
+          #   Method: ANY
             # Auth:
             #   Authorizer: CognitoAuthorizer
 
