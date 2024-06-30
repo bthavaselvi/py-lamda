@@ -46,6 +46,7 @@ Resources:
       UserPoolName: ocr-stage-user-pool
       AutoVerifiedAttributes:
         - email
+
   OCRStageUserPoolClient:
       Type: 'AWS::Cognito::UserPoolClient'
       Properties:
@@ -53,15 +54,15 @@ Resources:
         UserPoolId: !Ref OCRStageUserPool
         GenerateSecret: false
 
-  CognitoAuthorizer:
-    Type: 'AWS::ApiGateway::Authorizer'
-    Properties:
-      Name: CognitoAuthorizer
-      IdentitySource: method.request.header.Authorization
-      RestApiId: !Ref StgApiGateway
-      Type: COGNITO_USER_POOLS
-      ProviderARNs:
-        - !GetAtt OCRStageUserPool.Arn
+  # CognitoAuthorizer:
+  #   Type: 'AWS::ApiGateway::Authorizer'
+  #   Properties:
+  #     Name: CognitoAuthorizer
+  #     IdentitySource: method.request.header.Authorization
+  #     RestApiId: !Ref StgApiGateway
+  #     Type: COGNITO_USER_POOLS
+  #     ProviderARNs:
+  #       - !GetAtt OCRStageUserPool.Arn
 
   LambdaExecutionRole:
       Type: AWS::IAM::Role
@@ -132,8 +133,8 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
-            Auth:
-              Authorizer: CognitoAuthorizer
+            # Auth:
+            #   Authorizer: CognitoAuthorizer
 
   OCRLogGroup:
     Type: AWS::Logs::LogGroup
