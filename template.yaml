@@ -89,7 +89,7 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
-  MyApiGateway-prd:
+  MyApiGatewayPrd:
     Type: 'AWS::Serverless::Api'
     Properties:
       StageName: prod
