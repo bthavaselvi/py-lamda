@@ -52,7 +52,7 @@ Resources:
       Properties:
         ClientName: stg-client
         UserPoolId: !Ref OCRStageUserPool
-        GenerateSecret: false
+        GenerateSecret: true
 
   LambdaExecutionRole:
       Type: AWS::IAM::Role
@@ -110,9 +110,8 @@ Resources:
             Path: /{proxy+}
             Method: ANY
             Auth:
-              DefaultAuthorizer: CognitoAuthorizer
               Authorizers:
-                CognitoAuthorizer:
+                StgCognitoAuthorizer:
                   UserPoolArn: !GetAtt OCRStageUserPool.Arn
                   Identity:
                     Header: Authorization
