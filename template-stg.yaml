@@ -39,6 +39,7 @@ Parameters:
     Description: "Deployment stage"
 
 Resources:
+
   OCRStageUserPool:
     Type: 'AWS::Cognito::UserPool'
     Properties:
@@ -52,7 +53,6 @@ Resources:
         UserPoolId: !Ref OCRStageUserPool
         GenerateSecret: false
 
-Resources:
   LambdaExecutionRole:
       Type: AWS::IAM::Role
       Properties:
