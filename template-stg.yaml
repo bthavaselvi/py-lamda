@@ -87,9 +87,17 @@ Resources:
           - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
 
   StgApiGateway:
-    Type: 'AWS::Serverless::Api'
-    Properties:
-      StageName: !Ref Stage    
+      Type: 'AWS::Serverless::Api'
+      Properties:
+        StageName: !Ref Stage
+        Auth:
+          DefaultAuthorizer: CognitoAuthorizer
+          Authorizers:
+            CognitoAuthorizer:
+              UserPoolArn: !GetAtt OCRStageUserPool.Arn
+              Identity:
+                Header: Authorization
+              AuthorizationScopes: []
 
   OCRFunctionStg:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -115,18 +123,7 @@ Resources:
             Path: /{proxy+}
             Method: ANY
             Auth:
-              Authorizer: CognitoStgAuthorizer
- 
-      
-  CognitoStgAuthorizer:
-    Type: 'AWS::ApiGateway::Authorizer'
-    Properties:
-      Name: CognitoStgAuthorizer
-      IdentitySource: method.request.header.Authorization
-      RestApiId: !Ref StgApiGateway
-      Type: COGNITO_USER_POOLS
-      ProviderARNs:
-        - !GetAtt OCRStageUserPool.Arn
+              Authorizer: CognitoAuthorizer
 
   OCRLogGroup:
     Type: AWS::Logs::LogGroup
