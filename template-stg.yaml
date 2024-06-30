@@ -97,20 +97,20 @@ Resources:
           - 'arn:aws:iam::aws:policy/ComprehendFullAccess'
           - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
 
-  StgApiGateway:
-      Type: 'AWS::Serverless::Api'
-      Properties:
-        StageName: !Ref Stage
-        Path: /{proxy+}
-        Method: ANY
-        Auth:
-          DefaultAuthorizer: CognitoAuthorizer
-          Authorizers:
-            CognitoAuthorizer:
-              UserPoolArn: !GetAtt OCRStageUserPool.Arn
-              Identity:
-                Header: Authorization
-              AuthorizationScopes: []
+  # StgApiGateway:
+  #     Type: 'AWS::Serverless::Api'
+  #     Properties:
+  #       StageName: !Ref Stage
+  #       Path: /{proxy+}
+  #       Method: ANY
+  #       Auth:
+  #         DefaultAuthorizer: CognitoAuthorizer
+  #         Authorizers:
+  #           CognitoAuthorizer:
+  #             UserPoolArn: !GetAtt OCRStageUserPool.Arn
+  #             Identity:
+  #               Header: Authorization
+  #             AuthorizationScopes: []
 
   OCRFunctionStg:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -131,12 +131,18 @@ Resources:
       Events:
         OCRStg:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          RestApiId: !Ref StgApiGateway
-          # Properties:
-          #   Path: /{proxy+}
-          #   Method: ANY
-            # Auth:
-            #   Authorizer: CognitoAuthorizer
+          # RestApiId: !Ref StgApiGateway
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+            Auth:
+            DefaultAuthorizer: CognitoAuthorizer
+            Authorizers:
+              CognitoAuthorizer:
+                UserPoolArn: !GetAtt OCRStageUserPool.Arn
+                Identity:
+                  Header: Authorization
+                AuthorizationScopes: []
 
   OCRLogGroup:
     Type: AWS::Logs::LogGroup
