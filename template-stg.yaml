@@ -32,6 +32,26 @@ Globals:
         "HttpMethod": "*",
     }]
 
+Parameters:
+  Stage:
+    Type: String
+    Default: staging
+    Description: "Deployment stage"
+
+Resources:
+  OCRStageUserPool:
+    Type: 'AWS::Cognito::UserPool'
+    Properties:
+      UserPoolName: ocr-stage-user-pool
+      AutoVerifiedAttributes:
+        - email
+  OCRStageUserPoolClient:
+      Type: 'AWS::Cognito::UserPoolClient'
+      Properties:
+        ClientName: stg-client
+        UserPoolId: !Ref OCRStageUserPool
+        GenerateSecret: false
+
 Resources:
   LambdaExecutionRole:
       Type: AWS::IAM::Role
@@ -79,19 +99,33 @@ Resources:
       Role: !GetAtt LambdaExecutionRole.Arn
       Environment:
         Variables:
-          STAGE: staging
+          STAGE: !Ref Stage
       Architectures:
        - x86_64
       Events:
         OCRStg:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          RestApiId: !Ref StgApiGateway
           Properties:
             Path: /{proxy+}
             Method: ANY
-  MyApiGatewayStg:
+          Auth:
+            Authorizer: CognitoStgAuthorizer
+  StgApiGateway:
     Type: 'AWS::Serverless::Api'
     Properties:
-      StageName: staging
+      StageName: !Ref Stage
+      
+  CognitoStgAuthorizer:
+    Type: 'AWS::ApiGateway::Authorizer'
+    Properties:
+      Name: CognitoStgAuthorizer
+      IdentitySource: method.request.header.Authorization
+      RestApiId: !Ref StgApiGateway
+      Type: COGNITO_USER_POOLS
+      ProviderARNs:
+        - !GetAtt OCRStageUserPool.Arn
+
   OCRLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
@@ -137,7 +171,7 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   OCRStgApi:
     Description: API Gateway endpoint URL for  stage for Hello World function
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/stg/ocr"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/ocr"
   OCRFunction:
     Description: OCR Lambda Function ARN
     Value: !GetAtt OCRFunctionStg.Arn
