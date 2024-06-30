@@ -32,7 +32,28 @@ Globals:
         "HttpMethod": "*",
     }]
 
+Parameters:
+  Stage:
+    Type: String
+    Default: stg
+    Description: "Deployment stage"
+
 Resources:
+
+  OCRStageUserPool:
+    Type: 'AWS::Cognito::UserPool'
+    Properties:
+      UserPoolName: ocr-stage-user-pool
+      AutoVerifiedAttributes:
+        - email
+
+  OCRStageUserPoolClient:
+      Type: 'AWS::Cognito::UserPoolClient'
+      Properties:
+        ClientName: stg-client
+        UserPoolId: !Ref OCRStageUserPool
+        GenerateSecret: true
+
   LambdaExecutionRole:
       Type: AWS::IAM::Role
       Properties:
@@ -65,7 +86,6 @@ Resources:
           - 'arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess'
           - 'arn:aws:iam::aws:policy/ComprehendFullAccess'
           - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
-          
   OCRFunctionStg:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -77,15 +97,26 @@ Resources:
       Timeout: 60
       PackageType: Zip
       Role: !GetAtt LambdaExecutionRole.Arn
-     
+      Environment:
+        Variables:
+          STAGE: !Ref Stage
       Architectures:
        - x86_64
       Events:
         OCRStg:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          # RestApiId: !Ref StgApiGateway
           Properties:
             Path: /{proxy+}
             Method: ANY
+            Auth:
+              Authorizers:
+                StgCognitoAuthorizer:
+                  UserPoolArn: !GetAtt OCRStageUserPool.Arn
+                  Identity:
+                    Header: Authorization
+                  AuthorizationScopes: []
+
   OCRLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
@@ -131,7 +162,7 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   OCRStgApi:
     Description: API Gateway endpoint URL for  stage for Hello World function
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/stg/ocr"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/ocr"
   OCRFunction:
     Description: OCR Lambda Function ARN
     Value: !GetAtt OCRFunctionStg.Arn

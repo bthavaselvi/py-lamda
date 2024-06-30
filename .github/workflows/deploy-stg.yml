@@ -34,5 +34,5 @@ jobs:
           sam build --use-container
 
       - name: Deploy SAM application
-        run: sam deploy --template-file template-stg.yaml --no-confirm-changeset --no-fail-on-empty-changeset
+        run: sam deploy --stack-name ocr-staging --template-file template-stg.yaml --no-confirm-changeset --no-fail-on-empty-changeset
        

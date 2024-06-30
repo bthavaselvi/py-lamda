@@ -31,6 +31,11 @@ Globals:
         "ResourcePath": "/*",
         "HttpMethod": "*",
     }]
+Parameters:
+  Stage:
+    Type: String
+    Default: prd
+    Description: "Deployment production"
 
 Resources:
   LambdaExecutionRole:
@@ -65,7 +70,21 @@ Resources:
           - 'arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess'
           - 'arn:aws:iam::aws:policy/ComprehendFullAccess'
           - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
-          
+
+  OCRProdUserPool:
+    Type: 'AWS::Cognito::UserPool'
+    Properties:
+      UserPoolName: ocr-prod-user-pool
+      AutoVerifiedAttributes:
+        - email
+
+  OCRProdUserPoolClient:
+      Type: 'AWS::Cognito::UserPoolClient'
+      Properties:
+        ClientName: prd-client
+        UserPoolId: !Ref OCRProdUserPool
+        GenerateSecret: true
+      
   OCRFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -80,12 +99,23 @@ Resources:
      
       Architectures:
        - x86_64
+      Environment:
+        Variables:
+          STAGE: prod
       Events:
         OCR:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /{proxy+}
             Method: ANY
+            Auth:
+              Authorizers:
+                StgCognitoAuthorizer:
+                  UserPoolArn: !GetAtt OCRProdUserPool.Arn
+                  Identity:
+                    Header: Authorization
+                  AuthorizationScopes: []
+  
   OCRLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
