@@ -77,7 +77,9 @@ Resources:
       Timeout: 60
       PackageType: Zip
       Role: !GetAtt LambdaExecutionRole.Arn
-     
+      Environment:
+        Variables:
+          STAGE: staging
       Architectures:
        - x86_64
       Events:
@@ -86,6 +88,10 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
+  MyApiGateway-stg:
+    Type: 'AWS::Serverless::Api'
+    Properties:
+      StageName: staging
   OCRLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
