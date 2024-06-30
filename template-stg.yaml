@@ -35,7 +35,7 @@ Globals:
 Parameters:
   Stage:
     Type: String
-    Default: staging
+    Default: stg
     Description: "Deployment stage"
 
 Resources:
@@ -85,7 +85,12 @@ Resources:
           - 'arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess'
           - 'arn:aws:iam::aws:policy/ComprehendFullAccess'
           - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
-          
+
+  StgApiGateway:
+    Type: 'AWS::Serverless::Api'
+    Properties:
+      StageName: !Ref Stage    
+
   OCRFunctionStg:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -109,12 +114,9 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
-          Auth:
-            Authorizer: CognitoStgAuthorizer
-  StgApiGateway:
-    Type: 'AWS::Serverless::Api'
-    Properties:
-      StageName: !Ref Stage
+            Auth:
+              Authorizer: CognitoStgAuthorizer
+ 
       
   CognitoStgAuthorizer:
     Type: 'AWS::ApiGateway::Authorizer'
