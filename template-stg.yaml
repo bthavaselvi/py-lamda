@@ -109,14 +109,25 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
-            Auth:
-              Authorizers:
-                StgCognitoAuthorizer:
-                  UserPoolArn: !GetAtt OCRStageUserPool.Arn
-                  Identity:
-                    Header: Authorization
-                  AuthorizationScopes: []
+            RestApiId: !Ref StgApiGateway
+            # Auth:
+            #   Authorizers:
+            #     StgCognitoAuthorizer:
+            #       UserPoolArn: !GetAtt OCRStageUserPool.Arn
+            #       Identity:
+            #         Header: Authorization
+            #       AuthorizationScopes: []
 
+  StgApiGateway:
+      Type: AWS::Serverless::Api
+      Properties:
+        Name: !Join [ '-', [ 'ocr-api-stg' , Ref: "AWS::StackName" ]]
+        StageName: !Ref Stage
+        Auth:
+            DefaultAuthorizer: StgAuthorizer
+            Authorizers:
+              StgAuthorizer:
+                UserPoolArn: !GetAtt OCRStageUserPool.Arn
   OCRLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
