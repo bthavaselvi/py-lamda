@@ -117,18 +117,18 @@ Resources:
       Events:
         OCRStg:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          RestApiId: !Ref StgApiGateway
+          # RestApiId: !Ref StgApiGateway
           Properties:
             Path: /{proxy+}
             Method: ANY
-            RestApiId: !Ref StgApiGateway
-            # Auth:
-            #   Authorizers:
-            #     StgCognitoAuthorizer:
-            #       UserPoolArn: !GetAtt OCRStageUserPool.Arn
-            #       Identity:
-            #         Header: Authorization
-            #       AuthorizationScopes: []
+            # RestApiId: !Ref StgApiGateway
+            Auth:
+              Authorizers:
+                StgCognitoAuthorizer:
+                  UserPoolArn: !GetAtt OCRStageUserPool.Arn
+                  Identity:
+                    Header: Authorization
+                  AuthorizationScopes: []
 
  
   OCRLogGroup:
