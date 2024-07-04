@@ -54,16 +54,16 @@ Resources:
         UserPoolId: !Ref OCRStageUserPool
         GenerateSecret: true
 
-  StgApiGateway:
-      Type: AWS::Serverless::Api
-      Properties:
-        Name: ocr-api-stg
-        StageName: !Ref Stage
-        Auth:
-            DefaultAuthorizer: StgAuthorizer
-            Authorizers:
-              StgAuthorizer:
-                UserPoolArn: !GetAtt OCRStageUserPool.Arn
+  # StgApiGateway:
+  #     Type: AWS::Serverless::Api
+  #     Properties:
+  #       Name: ocr-api-stg
+  #       StageName: !Ref Stage
+  #       Auth:
+  #           DefaultAuthorizer: StgAuthorizer
+  #           Authorizers:
+  #             StgAuthorizer:
+  #               UserPoolArn: !GetAtt OCRStageUserPool.Arn
 
   LambdaExecutionRole:
       Type: AWS::IAM::Role
