@@ -28,6 +28,11 @@ Parameters:
     Default: stg
     Description: "Deployment stage"
 
+  CustomDomain:
+    Type: String
+    Default: ocr-stg
+    Description: "Custom domain for Cognito user pool"
+
 Resources:
 
   OCRStageUserPool:
@@ -43,6 +48,12 @@ Resources:
       ClientName: stg-client
       UserPoolId: !Ref OCRStageUserPool
       GenerateSecret: true
+
+  OCRStageUserPoolDomain:
+    Type: 'AWS::Cognito::UserPoolDomain'
+    Properties:
+      Domain: !Ref CustomDomain
+      UserPoolId: !Ref OCRStageUserPool
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
@@ -159,3 +170,6 @@ Outputs:
   OCRFunctionIamRole:
     Description: Implicit IAM Role created for OCR function
     Value: !GetAtt LambdaExecutionRole.Arn
+  OCRCustomDomain:
+    Description: Custom domain URL for Cognito user pool
+    Value: !Sub "https://${CustomDomain}.auth.${AWS::Region}.amazoncognito.com"

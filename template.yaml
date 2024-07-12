@@ -10,12 +10,12 @@ Globals:
     Timeout: 3
     MemorySize: 128
     Tracing: Active
- 
+
   Api:
     TracingEnabled: true
     BinaryMediaTypes:
       - '*/*'
-    MethodSettings: 
+    MethodSettings:
       - LoggingLevel: INFO
         MetricsEnabled: True
         DataTraceEnabled: True
@@ -27,6 +27,11 @@ Parameters:
     Type: String
     Default: prd
     Description: "Deployment production"
+
+  CustomDomain:
+    Type: String
+    Default: ocr-prd
+    Description: "Custom domain for Cognito user pool"
 
 Resources:
 
@@ -43,6 +48,12 @@ Resources:
       ClientName: prd-client
       UserPoolId: !Ref OCRPrdUserPool
       GenerateSecret: true
+
+  OCRPrdUserPoolDomain:
+    Type: 'AWS::Cognito::UserPoolDomain'
+    Properties:
+      Domain: !Ref CustomDomain
+      UserPoolId: !Ref OCRPrdUserPool
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
@@ -159,3 +170,6 @@ Outputs:
   OCRFunctionIamRole:
     Description: Implicit IAM Role created for OCR function
     Value: !GetAtt LambdaExecutionRole.Arn
+  OCRCustomDomain:
+    Description: Custom domain URL for Cognito user pool
+    Value: !Sub "https://${CustomDomain}.auth.${AWS::Region}.amazoncognito.com"
