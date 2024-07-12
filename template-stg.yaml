@@ -5,32 +5,22 @@ Description: >
 
   Sample SAM Template for ocr-service stage deployment
 
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
     Timeout: 3
     MemorySize: 128
-
     Tracing: Active
  
   Api:
     TracingEnabled: true
     BinaryMediaTypes:
       - '*/*'
-    MethodSettings: [{
-        # Turn on Info logging
-        "LoggingLevel": "INFO",
-
-        # Enable Metrics
-        "MetricsEnabled": True,
-
-        # Trace-level Logging
-        "DataTraceEnabled": True,
-
-        # On all Paths & methods
-        "ResourcePath": "/*",
-        "HttpMethod": "*",
-    }]
+    MethodSettings: 
+      - LoggingLevel: INFO
+        MetricsEnabled: True
+        DataTraceEnabled: True
+        ResourcePath: "/*"
+        HttpMethod: "*"
 
 Parameters:
   Stage:
@@ -48,50 +38,51 @@ Resources:
         - email
 
   OCRStageUserPoolClient:
-      Type: 'AWS::Cognito::UserPoolClient'
-      Properties:
-        ClientName: stg-client
-        UserPoolId: !Ref OCRStageUserPool
-        GenerateSecret: true
+    Type: 'AWS::Cognito::UserPoolClient'
+    Properties:
+      ClientName: stg-client
+      UserPoolId: !Ref OCRStageUserPool
+      GenerateSecret: true
 
   LambdaExecutionRole:
-      Type: AWS::IAM::Role
-      Properties:
-        AssumeRolePolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-            - Effect: Allow
-              Principal:
-                Service: lambda.amazonaws.com
-              Action: 'sts:AssumeRole'
-        Policies:
-          - PolicyName: LambdaTextractAccessPolicy
-            PolicyDocument:
-              Version: '2012-10-17'
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - 'textract:DetectDocumentText'
-                    - 'textract:AnalyzeDocument'
-                    - 'textract:StartDocumentTextDetection'
-                    - 'textract:GetDocumentTextDetection'
-                    - 'textract:StartDocumentAnalysis'
-                    - 'textract:GetDocumentAnalysis'
-                    - 'textract:AnalyzeExpense'
-                    - 'textract:AmazonTextractFullAccess'
-                    - 'textract:AnalyzeID'
-                  Resource: '*'
-        ManagedPolicyArns:
-          - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
-          - 'arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess'
-          - 'arn:aws:iam::aws:policy/ComprehendFullAccess'
-          - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: LambdaTextractAccessPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'textract:DetectDocumentText'
+                  - 'textract:AnalyzeDocument'
+                  - 'textract:StartDocumentTextDetection'
+                  - 'textract:GetDocumentTextDetection'
+                  - 'textract:StartDocumentAnalysis'
+                  - 'textract:GetDocumentAnalysis'
+                  - 'textract:AnalyzeExpense'
+                  - 'textract:AmazonTextractFullAccess'
+                  - 'textract:AnalyzeID'
+                Resource: '*'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+        - 'arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess'
+        - 'arn:aws:iam::aws:policy/ComprehendFullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
+
   OCRFunctionStg:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: ocr/
       Policies:
-       - CloudWatchLogsFullAccess
+        - CloudWatchLogsFullAccess
       Handler: lambda_function.lambda_handler
       Runtime: python3.12
       Timeout: 60
@@ -101,28 +92,35 @@ Resources:
         Variables:
           STAGE: !Ref Stage
       Architectures:
-       - x86_64
+        - x86_64
       Events:
         OCRStg:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          # RestApiId: !Ref StgApiGateway
+          Type: Api
           Properties:
             Path: /{proxy+}
             Method: ANY
+            RestApiId: !Ref StgApi
             Auth:
-              Authorizers:
-                StgCognitoAuthorizer:
-                  UserPoolArn: !GetAtt OCRStageUserPool.Arn
-                  Identity:
-                    Header: Authorization
-                  AuthorizationScopes: []
+              Authorizer: StgCognitoAuthorizer
+
+  StgApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: StgApi
+      StageName: !Ref Stage
+      Auth:
+        Authorizers:
+          StgCognitoAuthorizer:
+            UserPoolArn: !GetAtt OCRStageUserPool.Arn
+            Identity:
+              Header: Authorization
 
   OCRLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${OCRFunctionStg}"
       RetentionInDays: 5
-  
+
   ConfigLambdaPermission:
     Type: AWS::Lambda::Permission
     DependsOn: OCRFunctionStg
@@ -130,17 +128,12 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !Ref OCRFunctionStg
       Principal: apigateway.amazonaws.com
-        ####### Necessary for API Gateway Logging ########
-      # Add the CloudWatchRole and Account resource to your template to give API Gateway permissions write to CloudWatch logs
-      # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-account.html#aws-resource-apigateway-account-examples
-      # 
-      # NOTE: This is a one time process. As long as you have this enabled once in a region, you can deploy other stacks
-      #       without the need for each stack to create this role. As a good practice, create a separate stack altogether
-      #       with just the API Gateway logging role so none of your application stacks need them.
+
   ApiGwAccountConfig: 
     Type: "AWS::ApiGateway::Account"
     Properties: 
       CloudWatchRoleArn: !GetAtt "ApiGatewayLoggingRole.Arn"
+
   ApiGatewayLoggingRole: 
     Type: "AWS::IAM::Role"
     Properties: 
@@ -155,17 +148,14 @@ Resources:
       Path: "/"
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs' 
-            
+
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   OCRStgApi:
-    Description: API Gateway endpoint URL for  stage for Hello World function
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/ocr"
+    Description: API Gateway endpoint URL for stage for OCR function
+    Value: !Sub "https://${StgApi}.execute-api.${AWS::Region}.amazonaws.com/ocr/organizations"
   OCRFunction:
     Description: OCR Lambda Function ARN
     Value: !GetAtt OCRFunctionStg.Arn
   OCRFunctionIamRole:
-    Description: Implicit IAM Role created for Hello World function -0b
+    Description: Implicit IAM Role created for OCR function
     Value: !GetAtt LambdaExecutionRole.Arn
