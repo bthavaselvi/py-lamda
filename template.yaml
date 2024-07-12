@@ -37,7 +37,7 @@ Resources:
       AutoVerifiedAttributes:
         - email
 
-  OCRStageUserPoolClient:
+  OCRPrdUserPoolClient:
     Type: 'AWS::Cognito::UserPoolClient'
     Properties:
       ClientName: prd-client
@@ -94,7 +94,7 @@ Resources:
       Architectures:
         - x86_64
       Events:
-        OCRStg:
+        OCRPrd:
           Type: Api
           Properties:
             Path: /{proxy+}
@@ -103,7 +103,7 @@ Resources:
             Auth:
               Authorizer: PrdCognitoAuthorizer
 
-  StgApi:
+  PrdApi:
     Type: AWS::Serverless::Api
     Properties:
       Name: PrdApi
@@ -150,8 +150,8 @@ Resources:
         - 'arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs' 
 
 Outputs:
-  OCRStgApi:
-    Description: API Gateway endpoint URL for stage for OCR function
+  OCRPrdApi:
+    Description: API Gateway endpoint URL for prod stage for OCR function
     Value: !Sub "https://${PrdApi}.execute-api.${AWS::Region}.amazonaws.com/ocr/organizations"
   OCRFunction:
     Description: OCR Lambda Function ARN
