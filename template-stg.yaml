@@ -1,4 +1,35 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  ocr-service-stg
+
+  Sample SAM Template for ocr-service stage deployment
+
+Globals:
+  Function:
+    Timeout: 3
+    MemorySize: 128
+    Tracing: Active
+ 
+  Api:
+    TracingEnabled: true
+    BinaryMediaTypes:
+      - '*/*'
+    MethodSettings: 
+      - LoggingLevel: INFO
+        MetricsEnabled: True
+        DataTraceEnabled: True
+        ResourcePath: "/*"
+        HttpMethod: "*"
+
+Parameters:
+  Stage:
+    Type: String
+    Default: stg
+    Description: "Deployment stage"
+
 Resources:
+
   OCRStageUserPool:
     Type: 'AWS::Cognito::UserPool'
     Properties:
@@ -12,6 +43,39 @@ Resources:
       ClientName: stg-client
       UserPoolId: !Ref OCRStageUserPool
       GenerateSecret: true
+
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: LambdaTextractAccessPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'textract:DetectDocumentText'
+                  - 'textract:AnalyzeDocument'
+                  - 'textract:StartDocumentTextDetection'
+                  - 'textract:GetDocumentTextDetection'
+                  - 'textract:StartDocumentAnalysis'
+                  - 'textract:GetDocumentAnalysis'
+                  - 'textract:AnalyzeExpense'
+                  - 'textract:AmazonTextractFullAccess'
+                  - 'textract:AnalyzeID'
+                Resource: '*'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+        - 'arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess'
+        - 'arn:aws:iam::aws:policy/ComprehendFullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
 
   OCRFunctionStg:
     Type: AWS::Serverless::Function
@@ -50,6 +114,40 @@ Resources:
             UserPoolArn: !GetAtt OCRStageUserPool.Arn
             Identity:
               Header: Authorization
+
+  OCRLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${OCRFunctionStg}"
+      RetentionInDays: 5
+
+  ConfigLambdaPermission:
+    Type: AWS::Lambda::Permission
+    DependsOn: OCRFunctionStg
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref OCRFunctionStg
+      Principal: apigateway.amazonaws.com
+
+  ApiGwAccountConfig: 
+    Type: "AWS::ApiGateway::Account"
+    Properties: 
+      CloudWatchRoleArn: !GetAtt "ApiGatewayLoggingRole.Arn"
+
+  ApiGatewayLoggingRole: 
+    Type: "AWS::IAM::Role"
+    Properties: 
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - Effect: Allow
+            Principal: 
+              Service: 
+                - "apigateway.amazonaws.com"
+            Action: "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs' 
 
 Outputs:
   OCRStgApi:
