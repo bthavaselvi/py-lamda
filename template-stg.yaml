@@ -54,17 +54,6 @@ Resources:
         UserPoolId: !Ref OCRStageUserPool
         GenerateSecret: true
 
-  # StgApiGateway:
-  #     Type: AWS::Serverless::Api
-  #     Properties:
-  #       Name: ocr-api-stg
-  #       StageName: !Ref Stage
-  #       Auth:
-  #           DefaultAuthorizer: StgAuthorizer
-  #           Authorizers:
-  #             StgAuthorizer:
-  #               UserPoolArn: !GetAtt OCRStageUserPool.Arn
-
   LambdaExecutionRole:
       Type: AWS::IAM::Role
       Properties:
@@ -97,7 +86,6 @@ Resources:
           - 'arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess'
           - 'arn:aws:iam::aws:policy/ComprehendFullAccess'
           - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
-
   OCRFunctionStg:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -121,7 +109,6 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
-            # RestApiId: !Ref StgApiGateway
             Auth:
               Authorizers:
                 StgCognitoAuthorizer:
@@ -130,7 +117,6 @@ Resources:
                     Header: Authorization
                   AuthorizationScopes: []
 
- 
   OCRLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
