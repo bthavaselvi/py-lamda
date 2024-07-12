@@ -99,14 +99,14 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
-            RestApiId: !Ref MyApi
+            RestApiId: !Ref StgApi
             Auth:
               Authorizer: StgCognitoAuthorizer
 
-  MyApi:
+  StgApi:
     Type: AWS::Serverless::Api
     Properties:
-      Name: MyApi
+      Name: AtgApi
       StageName: prod
       Auth:
         Authorizers:
@@ -152,7 +152,7 @@ Resources:
 Outputs:
   OCRStgApi:
     Description: API Gateway endpoint URL for stage for OCR function
-    Value: !Sub "https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/prod"
+    Value: !Sub "https://${StgApi}.execute-api.${AWS::Region}.amazonaws.com/prod"
   OCRFunction:
     Description: OCR Lambda Function ARN
     Value: !GetAtt OCRFunctionStg.Arn
