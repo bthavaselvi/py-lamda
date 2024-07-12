@@ -48,6 +48,24 @@ Resources:
       ClientName: stg-client
       UserPoolId: !Ref OCRStageUserPool
       GenerateSecret: true
+      AllowedOAuthFlows:
+        - code
+        - implicit
+      AllowedOAuthFlowsUserPoolClient: true
+      AllowedOAuthScopes:
+        - email
+        - openid
+        - profile
+      ExplicitAuthFlows:
+        - ALLOW_REFRESH_TOKEN_AUTH
+        - ALLOW_USER_SRP_AUTH
+      AccessTokenValidity: 60 # 60 minutes
+      IdTokenValidity: 60 # 60 minutes
+      RefreshTokenValidity: 30 # 30 days
+      TokenValidityUnits:
+        AccessToken: minutes
+        IdToken: minutes
+        RefreshToken: days
 
   OCRStageUserPoolDomain:
     Type: 'AWS::Cognito::UserPoolDomain'
