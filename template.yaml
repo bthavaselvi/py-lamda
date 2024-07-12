@@ -48,12 +48,40 @@ Resources:
       ClientName: prd-client
       UserPoolId: !Ref OCRPrdUserPool
       GenerateSecret: true
+      AllowedOAuthFlows:
+        - code
+        - implicit
+      AllowedOAuthFlowsUserPoolClient: true
+      AllowedOAuthScopes:
+        - email
+        - openid
+        - profile
+      ExplicitAuthFlows:
+        - ALLOW_REFRESH_TOKEN_AUTH
+        - ALLOW_USER_SRP_AUTH
+      AccessTokenValidity: 60 # 60 minutes
+      IdTokenValidity: 60 # 60 minutes
+      RefreshTokenValidity: 30 # 30 days
+      TokenValidityUnits:
+        AccessToken: minutes
+        IdToken: minutes
+        RefreshToken: days
 
   OCRPrdUserPoolDomain:
     Type: 'AWS::Cognito::UserPoolDomain'
     Properties:
       Domain: !Ref CustomDomain
       UserPoolId: !Ref OCRPrdUserPool
+
+  OCRResourceServer:
+    Type: AWS::Cognito::UserPoolResourceServer
+    Properties:
+      UserPoolId: !Ref OCRPrdUserPool
+      Identifier: ocr-service
+      Name: OCR Service Resource Server
+      Scopes:
+        - ScopeName: ocr.analyze
+          ScopeDescription: Analyze documents
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
