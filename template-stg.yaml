@@ -106,8 +106,8 @@ Resources:
   StgApi:
     Type: AWS::Serverless::Api
     Properties:
-      Name: AtgApi
-      StageName: prod
+      Name: StgApi
+      StageName: !Ref Stage
       Auth:
         Authorizers:
           StgCognitoAuthorizer:
@@ -152,7 +152,7 @@ Resources:
 Outputs:
   OCRStgApi:
     Description: API Gateway endpoint URL for stage for OCR function
-    Value: !Sub "https://${StgApi}.execute-api.${AWS::Region}.amazonaws.com/prod"
+    Value: !Sub "https://${StgApi}.execute-api.${AWS::Region}.amazonaws.com/ocr/organizations"
   OCRFunction:
     Description: OCR Lambda Function ARN
     Value: !GetAtt OCRFunctionStg.Arn
