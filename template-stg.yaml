@@ -55,7 +55,7 @@ Resources:
         - email
         - openid
         - profile
-        - ocr.analyze  # Custom scope for document analysis
+        # - ocr.analyze  # Custom scope for document analysis
       ExplicitAuthFlows:
         - ALLOW_REFRESH_TOKEN_AUTH
         - ALLOW_USER_SRP_AUTH
@@ -69,15 +69,15 @@ Resources:
       CallbackURLs:
         - https://yestechforce.com/callback  # Replace with your actual callback URL
 
-  OCRStageUserPoolResourceServer:
-    Type: 'AWS::Cognito::UserPoolResourceServer'
-    Properties:
-      UserPoolId: !Ref OCRStageUserPool
-      Identifier: ocr-service-stg
-      Name: OCR Service Resource Server
-      Scopes:
-        - ScopeName: ocr.analyze
-          ScopeDescription: Analyze documents
+  # OCRStageUserPoolResourceServer:
+  #   Type: 'AWS::Cognito::UserPoolResourceServer'
+  #   Properties:
+  #     UserPoolId: !Ref OCRStageUserPool
+  #     Identifier: ocr-service-stg
+  #     Name: OCR Service Resource Server
+  #     Scopes:
+  #       - ScopeName: ocr.analyze
+  #         ScopeDescription: Analyze documents
 
   OCRStageUserPoolDomain:
     Type: 'AWS::Cognito::UserPoolDomain'
