@@ -49,11 +49,13 @@ Resources:
       UserPoolId: !Ref OCRPrdUserPool
       GenerateSecret: true
       AllowedOAuthFlows:
-        - code
-        - implicit
+        - code  # Include only 'code' flow if you are using authorization code grant flow
       AllowedOAuthFlowsUserPoolClient: true
       AllowedOAuthScopes:
-        - ocr.analyze # Custom scope for document analysis
+        - email
+        - openid
+        - profile
+        # - ocr.analyze  # Custom scope for document analysis
       ExplicitAuthFlows:
         - ALLOW_REFRESH_TOKEN_AUTH
         - ALLOW_USER_SRP_AUTH
