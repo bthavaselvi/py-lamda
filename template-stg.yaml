@@ -43,32 +43,31 @@ Resources:
         - email
 
   OCRStageUserPoolClient:
-  Type: 'AWS::Cognito::UserPoolClient'
-  Properties:
-    ClientName: stg-client
-    UserPoolId: !Ref OCRStageUserPool
-    GenerateSecret: true
-    AllowedOAuthFlows:
-      - code  # Include only 'code' flow if you are using authorization code grant flow
-      # If needed for other flows, add 'implicit' or 'client_credentials' here
-    AllowedOAuthFlowsUserPoolClient: true
-    AllowedOAuthScopes:
-      - email
-      - openid
-      - profile
-      - ocr.analyze  # Custom scope for document analysis
-    ExplicitAuthFlows:
-      - ALLOW_REFRESH_TOKEN_AUTH
-      - ALLOW_USER_SRP_AUTH
-    AccessTokenValidity: 60 # 60 minutes
-    IdTokenValidity: 60 # 60 minutes
-    RefreshTokenValidity: 30 # 30 days
-    TokenValidityUnits:
-      AccessToken: minutes
-      IdToken: minutes
-      RefreshToken: days
-    CallbackURLs:
-      - https://yestechforce.com/callback  # Replace with your actual callback URL
+    Type: 'AWS::Cognito::UserPoolClient'
+    Properties:
+      ClientName: stg-client
+      UserPoolId: !Ref OCRStageUserPool
+      GenerateSecret: true
+      AllowedOAuthFlows:
+        - code  # Include only 'code' flow if you are using authorization code grant flow
+      AllowedOAuthFlowsUserPoolClient: true
+      AllowedOAuthScopes:
+        - email
+        - openid
+        - profile
+        - ocr.analyze  # Custom scope for document analysis
+      ExplicitAuthFlows:
+        - ALLOW_REFRESH_TOKEN_AUTH
+        - ALLOW_USER_SRP_AUTH
+      AccessTokenValidity: 60 # 60 minutes
+      IdTokenValidity: 60 # 60 minutes
+      RefreshTokenValidity: 30 # 30 days
+      TokenValidityUnits:
+        AccessToken: minutes
+        IdToken: minutes
+        RefreshToken: days
+      CallbackURLs:
+        - https://yestechforce.com/callback  # Replace with your actual callback URL
 
   OCRStageUserPoolResourceServer:
     Type: 'AWS::Cognito::UserPoolResourceServer'
@@ -123,7 +122,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ocr/
-      Policies:
+      Policies: 
         - CloudWatchLogsFullAccess
       Handler: lambda_function.lambda_handler
       Runtime: python3.12
