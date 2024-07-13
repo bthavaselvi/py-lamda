@@ -49,13 +49,13 @@ Resources:
       UserPoolId: !Ref OCRPrdUserPool
       GenerateSecret: true
       AllowedOAuthFlows:
-        - code
-        - implicit
+        - code  # Include only 'code' flow if you are using authorization code grant flow
       AllowedOAuthFlowsUserPoolClient: true
       AllowedOAuthScopes:
         - email
         - openid
         - profile
+        # - ocr.analyze  # Custom scope for document analysis
       ExplicitAuthFlows:
         - ALLOW_REFRESH_TOKEN_AUTH
         - ALLOW_USER_SRP_AUTH
@@ -66,6 +66,8 @@ Resources:
         AccessToken: minutes
         IdToken: minutes
         RefreshToken: days
+      CallbackURLs:
+        - https://yestechforce.com/callback  # Replace with your actual callback URL
 
   OCRPrdUserPoolDomain:
     Type: 'AWS::Cognito::UserPoolDomain'
