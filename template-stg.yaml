@@ -49,14 +49,11 @@ Resources:
       UserPoolId: !Ref OCRStageUserPool
       GenerateSecret: true
       AllowedOAuthFlows:
-        - code
-        - implicit
-      AllowedOAuthFlowsUserPoolClient: true
-      AllowedOAuthScopes:
-        - ocr.analyze # Custom scope for document analysis
-      ExplicitAuthFlows:
         - ALLOW_REFRESH_TOKEN_AUTH
         - ALLOW_USER_SRP_AUTH
+      AllowedOAuthFlowsUserPoolClient: true
+      # AllowedOAuthScopes:
+      #   - ocr.analyze # Custom scope for document analysis
       AccessTokenValidity: 60 # 60 minutes
       IdTokenValidity: 60 # 60 minutes
       RefreshTokenValidity: 30 # 30 days
