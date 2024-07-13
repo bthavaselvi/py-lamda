@@ -55,7 +55,7 @@ Resources:
         - email
         - openid
         - profile
-        # - ocr.analyze  # Custom scope for document analysis
+        - ocr.analyze  # Custom scope for document analysis
       ExplicitAuthFlows:
         - ALLOW_REFRESH_TOKEN_AUTH
         - ALLOW_USER_SRP_AUTH
