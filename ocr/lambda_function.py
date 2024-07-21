@@ -7,6 +7,7 @@ import traceback
 from common.utils import utils
 import boto3
 from common.DocumentType import DocumentType
+from jose import jwt
 
 app = Flask(__name__)
 logger = logging.getLogger()
@@ -18,8 +19,28 @@ s3_client = boto3.client('s3',region_name=region_name)
 bucket_name  = 'eazeitocrdocuments'
 path = 'ocr'
 
-@app.route('/analyze', methods=['POST'])
-def analyze_document():
+
+# Decode the JWT without verification since it's already verified by API Gateway
+def get_decoded_token(token):
+    return jwt.get_unverified_claims(token)
+
+@app.before_request
+def check_client_id():
+    auth_header = request.headers.get('Authorization', None)
+    if auth_header is None:
+        abort(401, description="Authorization header missing")
+
+    token = auth_header.split()[1]
+    decoded_token = get_decoded_token(token)
+
+    client_id_from_token = decoded_token.get('client_id')  # Adjust this if necessary
+    client_id_from_url = request.args.get('client_id')
+
+    if client_id_from_url != client_id_from_token:
+        abort(403, description="Client ID mismatch")
+
+@app.route('/<client_id>/analyze', methods=['POST'])
+def analyze_document(client_id):
     try:
         data = None
         file_content = None
