@@ -33,7 +33,7 @@ Parameters:
     Default: ocr-stg
     Description: "Custom domain for Cognito user pool"
   
-  S3_BUCKET_NAME:
+  S3BUCKETNAME:
     Type: String
     Default: eazeitocrdocuments-stg
   
@@ -140,7 +140,7 @@ Resources:
       Environment:
         Variables:
           STAGE: !Ref Stage
-          S3_BUCKET_NAME: !Ref S3_BUCKET_NAME
+          S3_BUCKET_NAME: !Ref S3BUCKETNAME
           REGION: !Ref REGION
       Architectures:
         - x86_64
