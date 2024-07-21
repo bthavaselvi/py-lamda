@@ -44,18 +44,19 @@ Resources:
 
   OCRStageUserPoolClient:
     Type: 'AWS::Cognito::UserPoolClient'
+    DependsOn: OCRStageUserPool  # Ensure UserPool is created first
     Properties:
       ClientName: stg-client
       UserPoolId: !Ref OCRStageUserPool
       GenerateSecret: true
       AllowedOAuthFlows:
-       - client_credentials  # Include only 'code' flow if you are using authorization code grant flow
+        - client_credentials
       AllowedOAuthFlowsUserPoolClient: true
       AllowedOAuthScopes:
         - email
         - openid
         - profile
-        # - ocr.analyze  # Custom scope for document analysis
+        - ocr.analyze
       ExplicitAuthFlows:
         - ALLOW_REFRESH_TOKEN_AUTH
         - ALLOW_USER_SRP_AUTH
@@ -69,22 +70,22 @@ Resources:
       CallbackURLs:
         - https://yestechforce.com/callback  # Replace with your actual callback URL
 
-  # OCRStageUserPoolResourceServer:
-  #   Type: 'AWS::Cognito::UserPoolResourceServer'
-  #   Properties:
-  #     UserPoolId: !Ref OCRStageUserPool
-  #     Identifier: ocr-service-stg
-  #     Name: OCR Service Resource Server
-  #     Scopes:
-  #       - ScopeName: ocr.analyze
-  #         ScopeDescription: Analyze documents
+  OCRStageUserPoolResourceServer:
+    Type: 'AWS::Cognito::UserPoolResourceServer'
+    Properties:
+      UserPoolId: !Ref OCRStageUserPool
+      Identifier: ocr-service-stg
+      Name: OCR Service Resource Server
+      Scopes:
+        - ScopeName: ocr.analyze
+          ScopeDescription: Analyze documents
 
   OCRStageUserPoolDomain:
     Type: 'AWS::Cognito::UserPoolDomain'
     Properties:
       Domain: !Ref CustomDomain
       UserPoolId: !Ref OCRStageUserPool
-
+      
   LambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
