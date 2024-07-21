@@ -8,15 +8,17 @@ from common.utils import utils
 import boto3
 from common.DocumentType import DocumentType
 from jose import jwt
-
+import os
 app = Flask(__name__)
 logger = logging.getLogger()
 logger.setLevel('INFO')
 
-region_name = 'us-east-2'
+region_name =  os.getenv('REGION')
+
 
 s3_client = boto3.client('s3',region_name=region_name)
-bucket_name  = 'eazeitocrdocuments'
+bucket_name  =  os.getenv('S3_BucKET_NAME') 
+# 'eazeitocrdocuments'
 path = 'ocr'
 
 
