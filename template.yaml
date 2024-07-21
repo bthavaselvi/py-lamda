@@ -60,9 +60,9 @@ Resources:
       GenerateSecret: true
       AllowedOAuthFlows:
         - client_credentials
-      AllowedOAuthFlowsUserPoolClient: true
-      AllowedOAuthScopes:
-        - ocr-service/ocr.analyze  # Custom scope for document analysis
+      # AllowedOAuthFlowsUserPoolClient: true
+      # AllowedOAuthScopes:
+      #   - ocr-service/ocr.analyze  # Custom scope for document analysis
       ExplicitAuthFlows:
         - ALLOW_REFRESH_TOKEN_AUTH
         - ALLOW_USER_SRP_AUTH
