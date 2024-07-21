@@ -42,6 +42,16 @@ Resources:
       AutoVerifiedAttributes:
         - email
 
+  OCRResourceServer:
+    Type: AWS::Cognito::UserPoolResourceServer
+    Properties:
+      UserPoolId: !Ref OCRPrdUserPool
+      Identifier: ocr-service
+      Name: OCR Service Resource Server
+      Scopes:
+        - ScopeName: ocr.analyze
+          ScopeDescription: Analyze documents
+
   OCRPrdUserPoolClient:
     Type: 'AWS::Cognito::UserPoolClient'
     Properties:
@@ -49,13 +59,10 @@ Resources:
       UserPoolId: !Ref OCRPrdUserPool
       GenerateSecret: true
       AllowedOAuthFlows:
-        - client_credentials  # Include only 'code' flow if you are using authorization code grant flow
+        - client_credentials
       AllowedOAuthFlowsUserPoolClient: true
       AllowedOAuthScopes:
-        - email
-        - openid
-        - profile
-        - ocr.analyze  # Custom scope for document analysis
+        - ocr-service/ocr.analyze  # Custom scope for document analysis
       ExplicitAuthFlows:
         - ALLOW_REFRESH_TOKEN_AUTH
         - ALLOW_USER_SRP_AUTH
@@ -75,15 +82,7 @@ Resources:
       Domain: !Ref CustomDomain
       UserPoolId: !Ref OCRPrdUserPool
 
-  OCRResourceServer:
-    Type: AWS::Cognito::UserPoolResourceServer
-    Properties:
-      UserPoolId: !Ref OCRPrdUserPool
-      Identifier: ocr-service
-      Name: OCR Service Resource Server
-      Scopes:
-        - ScopeName: ocr.analyze
-          ScopeDescription: Analyze documents
+
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
