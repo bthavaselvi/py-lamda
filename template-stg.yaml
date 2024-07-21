@@ -52,8 +52,11 @@ Resources:
       AllowedOAuthFlows:
         - client_credentials
       AllowedOAuthFlowsUserPoolClient: true
-      AllowedOAuthScopes:
-        - ocr-service-stg/ocr.analyze
+      # AllowedOAuthScopes:
+      #   - email
+      #   - openid
+      #   - profile
+        # - ocr.analyze
       ExplicitAuthFlows:
         - ALLOW_REFRESH_TOKEN_AUTH
         - ALLOW_USER_SRP_AUTH
