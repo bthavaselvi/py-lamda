@@ -49,7 +49,7 @@ Resources:
       UserPoolId: !Ref OCRPrdUserPool
       GenerateSecret: true
       AllowedOAuthFlows:
-        - code  # Include only 'code' flow if you are using authorization code grant flow
+        - client_credentials  # Include only 'code' flow if you are using authorization code grant flow
       AllowedOAuthFlowsUserPoolClient: true
       AllowedOAuthScopes:
         - email

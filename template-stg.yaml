@@ -49,7 +49,7 @@ Resources:
       UserPoolId: !Ref OCRStageUserPool
       GenerateSecret: true
       AllowedOAuthFlows:
-        - code  # Include only 'code' flow if you are using authorization code grant flow
+       - client_credentials  # Include only 'code' flow if you are using authorization code grant flow
       AllowedOAuthFlowsUserPoolClient: true
       AllowedOAuthScopes:
         - email
@@ -69,15 +69,15 @@ Resources:
       CallbackURLs:
         - https://yestechforce.com/callback  # Replace with your actual callback URL
 
-  # OCRStageUserPoolResourceServer:
-  #   Type: 'AWS::Cognito::UserPoolResourceServer'
-  #   Properties:
-  #     UserPoolId: !Ref OCRStageUserPool
-  #     Identifier: ocr-service-stg
-  #     Name: OCR Service Resource Server
-  #     Scopes:
-  #       - ScopeName: ocr.analyze
-  #         ScopeDescription: Analyze documents
+  OCRStageUserPoolResourceServer:
+    Type: 'AWS::Cognito::UserPoolResourceServer'
+    Properties:
+      UserPoolId: !Ref OCRStageUserPool
+      Identifier: ocr-service-stg
+      Name: OCR Service Resource Server
+      Scopes:
+        - ScopeName: ocr.analyze
+          ScopeDescription: Analyze documents
 
   OCRStageUserPoolDomain:
     Type: 'AWS::Cognito::UserPoolDomain'
