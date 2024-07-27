@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install aws-sam-cli awscli
-          pip install -r .github/workflows/requirements.txt
+          pip install -r requirements.txt
        
       - name: SAM build 
         run: 
@@ -35,4 +35,3 @@ jobs:
 
       - name: Deploy SAM application
         run: sam deploy --stack-name ocr-staging --template-file template-stg.yaml --no-confirm-changeset --no-fail-on-empty-changeset
-       
