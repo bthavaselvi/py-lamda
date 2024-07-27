@@ -26,7 +26,7 @@ path = 'ocr'
 def get_decoded_token(token):
     return jwt.get_unverified_claims(token)
 
-# @app.before_request
+@app.before_request
 def check_client_id():
     auth_header = request.headers.get('Authorization', None)
     if auth_header is None:
