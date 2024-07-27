@@ -4,3 +4,4 @@ aws-wsgi
 boto3
 amazon-textract-textractor
 openai
+pycognito
