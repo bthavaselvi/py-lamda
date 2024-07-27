@@ -1,5 +1,5 @@
 requests
-Flask
+flask
 aws-wsgi
 boto3
 amazon-textract-textractor
