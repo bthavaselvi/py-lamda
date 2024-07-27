@@ -35,4 +35,3 @@ jobs:
 
       - name: Deploy SAM application
         run: sam deploy --stack-name ocr-staging --template-file template-stg.yaml --no-confirm-changeset --no-fail-on-empty-changeset
-       

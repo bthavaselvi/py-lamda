@@ -1,7 +1,7 @@
 requests
-Flask
+flask
 aws-wsgi
 boto3
 amazon-textract-textractor
 openai
-amazon-textract-response-parser
+pycognito
