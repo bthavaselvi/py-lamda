@@ -151,8 +151,8 @@ Resources:
             Path: /{proxy+}
             Method: ANY
             RestApiId: !Ref StgApi
-            Auth:
-              Authorizer: StgCognitoAuthorizer
+            # Auth:
+            #   Authorizer: StgCognitoAuthorizer
 
   StgApi:
     Type: AWS::Serverless::Api
