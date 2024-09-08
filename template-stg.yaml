@@ -150,7 +150,7 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
-            RestApiId: !Ref StgApi
+            # RestApiId: !Ref StgApi
             # Auth:
             #   Authorizer: StgCognitoAuthorizer
 
